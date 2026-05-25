@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AgroInsure Intelligence Hub — Leadway Assurance</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#1a5c38;--green2:#0d3d20;--green-lt:#e8f5ed;--green-mid:#2e7d52;
+  --gold:#c9a84c;--gold-lt:#fdf6e3;
+  --red:#c0392b;--red-lt:#fdecea;
+  --amber:#e67e22;--amber-lt:#fef5ec;
+  --blue:#1565c0;--blue-lt:#e3f0ff;
+  --bg:#f4f6f3;--card:#fff;--border:#e2e8e0;
+  --text:#1a1f18;--text2:#5a6b58;--text3:#8fa08c;
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'DM Mono',monospace;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,var(--green2) 0%,var(--green) 100%);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand-name{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.brand-sub{font-size:11px;opacity:.65;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:16px;font-size:12px}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);padding:5px 12px;border-radius:20px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4caf50;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.topbar-time{opacity:.8;font-family:var(--mono);font-size:11px}
+
+/* TICKER */
+.ticker-bar{background:#111;padding:7px 0;overflow:hidden;border-bottom:2px solid var(--gold)}
+.ticker-track{display:flex;gap:0;animation:ticker 40s linear infinite;white-space:nowrap}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 28px;font-size:11px;color:#ccc;font-family:var(--mono);border-right:1px solid #333}
+.t-up{color:#4caf50}
+.t-dn{color:#ef5350}
+.t-label{color:#888}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* LAYOUT */
+.wrap{max-width:1400px;margin:0 auto;padding:16px 20px}
+
+/* METRIC CARDS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.metric{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.metric::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 var(--radius) 0 60px;opacity:.07}
+.metric.green::before{background:var(--green)}
+.metric.red::before{background:var(--red)}
+.metric.amber::before{background:var(--amber)}
+.metric.blue::before{background:var(--blue)}
+.metric-icon{font-size:20px;margin-bottom:8px}
+.metric-label{font-size:11px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.metric-val{font-size:28px;font-weight:700;color:var(--text);line-height:1;font-family:var(--mono)}
+.metric-delta{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:4px}
+.d-up{color:#2e7d32}
+.d-dn{color:#c62828}
+.d-warn{color:#e67e22}
+
+/* AI ASSISTANT */
+.ai-box{background:linear-gradient(135deg,var(--green2) 0%,#1a5c38 60%,#2e7d52 100%);border-radius:var(--radius);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden}
+.ai-box::after{content:'🌿';position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07}
+.ai-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ai-avatar{width:38px;height:38px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ai-title{font-size:14px;font-weight:700}
+.ai-sub{font-size:11px;opacity:.6;margin-top:2px}
+.ai-row{display:flex;gap:10px}
+.ai-input{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);padding:10px 14px;color:#fff;font-size:12px;font-family:var(--font);outline:none;transition:.2s}
+.ai-input:focus{background:rgba(255,255,255,.15);border-color:var(--gold)}
+.ai-input::placeholder{color:rgba(255,255,255,.4)}
+.ai-btn{background:var(--gold);color:#3d2a00;border:none;border-radius:var(--radius-sm);padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:.15s}
+.ai-btn:hover{background:#dbb94f;transform:translateY(-1px)}
+.ai-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.quick-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.qtag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;transition:.15s;font-family:var(--font)}
+.qtag:hover{background:rgba(255,255,255,.2)}
+.ai-response{margin-top:12px;background:rgba(0,0,0,.2);border-radius:var(--radius-sm);padding:14px;font-size:12px;line-height:1.7;color:rgba(255,255,255,.9);display:none;white-space:pre-wrap;max-height:300px;overflow-y:auto}
+.ai-thinking{display:none;align-items:center;gap:8px;margin-top:10px;font-size:12px;opacity:.7}
+.dot-anim span{display:inline-block;width:5px;height:5px;border-radius:50%;background:#fff;animation:dotpulse 1.2s infinite;margin:0 2px}
+.dot-anim span:nth-child(2){animation-delay:.2s}
+.dot-anim span:nth-child(3){animation-delay:.4s}
+@keyframes dotpulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:16px}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:16px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text)}
+.card-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.ci-green{background:var(--green-lt)}
+.ci-red{background:var(--red-lt)}
+.ci-gold{background:var(--gold-lt)}
+.ci-blue{background:var(--blue-lt)}
+.card-action{font-size:11px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:4px 8px;border-radius:6px}
+.card-action:hover{background:var(--bg);color:var(--green)}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:12px}
+.tab{font-size:11px;padding:7px 14px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;transition:.15s}
+.tab.on{color:var(--green);border-color:var(--green)}
+
+/* LEADS */
+.lead-list{display:flex;flex-direction:column;gap:8px}
+.lead{border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:.15s}
+.lead:hover{border-color:var(--green);box-shadow:0 2px 8px rgba(26,92,56,.08)}
+.lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.lead-name{font-size:13px;font-weight:700;color:var(--text)}
+.score{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;white-space:nowrap}
+.s-high{background:#e8f5e9;color:#1b5e20}
+.s-med{background:#fff8e1;color:#e65100}
+.s-low{background:#fce4ec;color:#880e4f}
+.lead-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--text2);margin-bottom:6px}
+.lead-tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px}
+.tg{background:var(--green-lt);color:var(--green)}
+.tb{background:var(--blue-lt);color:var(--blue)}
+.to{background:var(--gold-lt);color:#7a5f00}
+
+/* NOTIFICATIONS */
+.notif-list{display:flex;flex-direction:column;gap:8px}
+.notif{border-radius:var(--radius-sm);padding:11px 13px;border-left:3px solid;background:var(--bg)}
+.n-red{border-color:var(--red)}
+.n-green{border-color:#2e7d32}
+.n-amber{border-color:var(--amber)}
+.notif-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.notif-body{font-size:11px;color:var(--text2);line-height:1.5}
+.notif-time{font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+
+/* TARGET LIST */
+.target-list{display:flex;flex-direction:column;gap:0}
+.tgt{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.tgt:last-child{border-bottom:none}
+.tgt-num{font-size:11px;color:var(--text3);font-family:var(--mono);min-width:18px}
+.tgt-info{flex:1}
+.tgt-name{font-size:12px;font-weight:600;color:var(--text)}
+.tgt-detail{font-size:11px;color:var(--text2)}
+.tgt-btn{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--green-lt);color:var(--green);border:1px solid #a5d6a7;cursor:pointer;font-family:var(--font);font-weight:600}
+.tgt-btn:hover{background:#c8e6c9}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* NEWS */
+.news-list{display:flex;flex-direction:column}
+.news-item{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.news-item:last-child{border-bottom:none}
+.news-src{font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.news-hl{font-size:12px;color:var(--text);line-height:1.4;font-weight:500}
+.news-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+
+/* SECTORS */
+.sector-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.sector-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.sector-emoji{font-size:22px}
+.sector-name{font-size:13px;font-weight:700}
+.sector-num{font-size:26px;font-weight:700;font-family:var(--mono);margin-bottom:2px}
+.sector-lbl{font-size:11px;color:var(--text2);margin-bottom:10px}
+.sector-rows{display:flex;flex-direction:column;gap:5px}
+.srow{display:flex;justify-content:space-between;font-size:11px}
+.srow-k{color:var(--text2)}
+.srow-v{font-weight:600;color:var(--text)}
+
+/* STATE MAP */
+.state-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.state-item{background:var(--bg);border-radius:var(--radius-sm);padding:9px}
+.state-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px}
+.bar-wrap{height:4px;background:var(--border);border-radius:2px;margin-bottom:3px}
+.bar-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--green-mid))}
+.state-count{font-size:10px;color:var(--text3);font-family:var(--mono)}
+
+/* WEATHER */
+.weather-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.weather-item{background:var(--bg);border-radius:var(--radius-sm);padding:10px;text-align:center}
+.w-icon{font-size:22px;margin-bottom:4px}
+.w-state{font-size:11px;font-weight:700;color:var(--text)}
+.w-cond{font-size:10px;color:var(--text2);margin-bottom:4px}
+.w-risk{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block;font-weight:600}
+.wr-high{background:var(--red-lt);color:var(--red)}
+.wr-med{background:var(--amber-lt);color:var(--amber)}
+.wr-low{background:var(--green-lt);color:var(--green)}
+
+/* PIPELINE TABLE */
+.pipe-table{width:100%;border-collapse:collapse;font-size:11px}
+.pipe-table th{text-align:left;color:var(--text2);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--border);white-space:nowrap;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+.pipe-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+.pipe-table tr:last-child td{border-bottom:none}
+.pipe-table tr:hover td{background:var(--bg)}
+.prog-wrap{display:flex;align-items:center;gap:6px}
+.prog-bar{height:5px;border-radius:3px;flex:1;background:var(--border);overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+.pitch-btn{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--green-lt);color:var(--green);border:1px solid #a5d6a7;cursor:pointer;font-family:var(--font);font-weight:600}
+.pitch-btn:hover{background:#c8e6c9}
+
+/* CHART */
+.chart-wrap{position:relative;width:100%;height:180px}
+
+/* POPUP */
+.popup{position:fixed;top:16px;right:16px;width:280px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:9999;border-left:4px solid var(--green);display:none;animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:translateX(20px) scale(.95);opacity:0}to{transform:none;opacity:1}}
+.popup-close{position:absolute;top:8px;right:10px;background:none;border:none;font-size:16px;cursor:pointer;color:var(--text3)}
+.popup-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;padding-right:16px}
+.popup-body{font-size:11px;color:var(--text2);line-height:1.5}
+.popup-time{font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--mono)}
+
+/* SECTION LABEL */
+.section-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.section-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FOOTER */
+footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:8px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#c5d5c2;border-radius:3px}
+
+@media(max-width:900px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .main-grid{grid-template-columns:1fr}
+  .two-col,.three-col{grid-template-columns:1fr}
+  .weather-grid{grid-template-columns:repeat(2,1fr)}
+  .state-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:500px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .wrap{padding:10px 12px}
+  .topbar{padding:10px 12px}
+  .weather-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-icon">🌾</div>
+    <div>
+      <div class="brand-name">AgroInsure Intelligence Hub</div>
+      <div class="brand-sub">Leadway Assurance · Agricultural Insurance Division</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-pill"><div class="live-dot"></div><span>LIVE</span></div>
+    <span class="topbar-time" id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric green">
+      <div class="metric-icon">🎯</div>
+      <div class="metric-label">Hot Leads Today</div>
+      <div class="metric-val" id="m1">24</div>
+      <div class="metric-delta d-up">▲ +6 since 8am</div>
+    </div>
+    <div class="metric amber">
+      <div class="metric-icon">₦</div>
+      <div class="metric-label">Est. Premium Pool</div>
+      <div class="metric-val">48M</div>
+      <div class="metric-delta d-up">▲ ₦12M new today</div>
+    </div>
+    <div class="metric red">
+      <div class="metric-icon">⚠️</div>
+      <div class="metric-label">Weather Alerts</div>
+      <div class="metric-val" style="color:var(--red)">7</div>
+      <div class="metric-delta d-dn">▼ 3 flood risk zones</div>
+    </div>
+    <div class="metric blue">
+      <div class="metric-icon">📅</div>
+      <div class="metric-label">Follow-ups Due</div>
+      <div class="metric-val">11</div>
+      <div class="metric-delta d-warn">4 overdue</div>
+    </div>
+  </div>
+
+  <!-- AI ASSISTANT -->
+  <div class="ai-box">
+    <div class="ai-head">
+      <div class="ai-avatar">🤖</div>
+      <div>
+        <div class="ai-title">AI Sales Assistant — Powered by Claude</div>
+        <div class="ai-sub">Draft proposals · Pitch strategies · Risk analysis · WhatsApp messages · Intro emails</div>
+      </div>
+    </div>
+    <div class="ai-row">
+      <input class="ai-input" id="ai-in" placeholder="e.g. Draft a proposal for a poultry farm in Kaduna..."/>
+      <button class="ai-btn" id="ai-btn" onclick="runAI()">Generate ↗</button>
+    </div>
+    <div class="quick-tags">
+      <span class="qtag" onclick="q('Draft intro email for Prosperity Poultry Farm Ltd Kaduna')">Poultry farm email</span>
+      <span class="qtag" onclick="q('Recommend insurance products for a rice cooperative in Kano with CBN Anchor Borrower funding')">Rice cooperative pitch</span>
+      <span class="qtag" onclick="q('Write a WhatsApp pitch for a greenhouse operator in Abuja FCT')">Greenhouse WhatsApp</span>
+      <span class="qtag" onclick="q('Analyze flood risk for farms in Kebbi State and recommend insurance cover')">Flood risk analysis</span>
+      <span class="qtag" onclick="q('Generate talking points before a meeting with a catfish farm owner in Benue')">Meeting talking points</span>
+    </div>
+    <div class="ai-thinking" id="ai-think"><div class="dot-anim"><span></span><span></span><span></span></div> Generating your response...</div>
+    <div class="ai-response" id="ai-out"></div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+    <!-- LEADS -->
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title"><div class="card-icon ci-green">🔥</div> Hot Insurance Leads</div>
+        <button class="card-action" onclick="refreshLeads()">↻ Refresh</button>
+      </div>
+      <div class="tabs">
+        <div class="tab on" onclick="tabSwitch(this)">All</div>
+        <div class="tab" onclick="tabSwitch(this)">Crop</div>
+        <div class="tab" onclick="tabSwitch(this)">Poultry</div>
+        <div class="tab" onclick="tabSwitch(this)">Fishery</div>
+        <div class="tab" onclick="tabSwitch(this)">Livestock</div>
+      </div>
+      <div class="lead-list" id="leads"></div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title"><div class="card-icon ci-red">🔔</div> Live Alerts</div>
+          <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">8 NEW</span>
+        </div>
+        <div class="notif-list" id="notifs"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title"><div class="card-icon ci-gold">✅</div> Today's Contacts</div>
+        </div>
+        <div class="target-list" id="targets"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR MONITORS -->
+  <div class="section-lbl">Sector Monitors</div>
+  <div class="three-col">
+    <div class="sector-card">
+      <div class="sector-hd"><div class="sector-emoji">🐔</div><div class="sector-name">Poultry Sector</div></div>
+      <div class="sector-num" style="color:var(--blue)">142</div>
+      <div class="sector-lbl">Active farms monitored</div>
+      <div class="sector-rows">
+        <div class="srow"><span class="srow-k">Disease alerts</span><span class="srow-v" style="color:var(--red)">Newcastle — 3 LGAs</span></div>
+        <div class="srow"><span class="srow-k">Expansions</span><span class="srow-v" style="color:var(--green)">+19 this week</span></div>
+        <div class="srow"><span class="srow-k">Avg flock size</span><span class="srow-v">12,400 birds</span></div>
+        <div class="srow"><span class="srow-k">Top locations</span><span class="srow-v">Ogun, Kano, Kaduna</span></div>
+      </div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-hd"><div class="sector-emoji">🐟</div><div class="sector-name">Fishery Sector</div></div>
+      <div class="sector-num" style="color:#00796b">89</div>
+      <div class="sector-lbl">Fish farms tracked</div>
+      <div class="sector-rows">
+        <div class="srow"><span class="srow-k">New ponds</span><span class="srow-v" style="color:var(--green)">+8 this month</span></div>
+        <div class="srow"><span class="srow-k">CBN-linked</span><span class="srow-v">34 farms</span></div>
+        <div class="srow"><span class="srow-k">Avg pond area</span><span class="srow-v">0.4 ha</span></div>
+        <div class="srow"><span class="srow-k">Top locations</span><span class="srow-v">Benue, Anambra</span></div>
+      </div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-hd"><div class="sector-emoji">🐄</div><div class="sector-name">Livestock Sector</div></div>
+      <div class="sector-num" style="color:#6a1a5c">67</div>
+      <div class="sector-lbl">Ranches & herders tracked</div>
+      <div class="sector-rows">
+        <div class="srow"><span class="srow-k">Cattle ranches</span><span class="srow-v">43</span></div>
+        <div class="srow"><span class="srow-k">Dairy projects</span><span class="srow-v">12 active</span></div>
+        <div class="srow"><span class="srow-k">FMD alerts</span><span class="srow-v" style="color:var(--amber)">Adamawa — Watch</span></div>
+        <div class="srow"><span class="srow-k">Top locations</span><span class="srow-v">Plateau, Taraba</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS + STATES -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title"><div class="card-icon ci-green">📰</div> Today's Agricultural Headlines</div>
+      </div>
+      <div class="news-list" id="news"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title"><div class="card-icon ci-blue">📍</div> State Activity Index</div>
+      </div>
+      <div class="state-grid" id="states"></div>
+    </div>
+  </div>
+
+  <!-- WEATHER + GOV -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title"><div class="card-icon ci-red">🌧</div> Weather Risk Monitor</div>
+      </div>
+      <div class="weather-grid" id="weather"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title"><div class="card-icon ci-gold">🏛</div> Gov Programs & Grants</div>
+      </div>
+      <div class="news-list" id="gov"></div>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hd">
+      <div class="card-title"><div class="card-icon ci-green">📊</div> Insurance Opportunities Pipeline</div>
+      <span style="font-size:10px;color:var(--text3)">Live premium estimates</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="pipe-table">
+        <thead>
+          <tr>
+            <th>Farm / Company</th><th>Location</th><th>Sector</th>
+            <th>Recommended Cover</th><th>Est. Premium</th>
+            <th>Priority</th><th>Conversion</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="pipeline"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FUNNEL CHART -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hd">
+      <div class="card-title"><div class="card-icon ci-green">📈</div> Monthly Lead Funnel</div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<footer>AgroInsure Intelligence Hub &nbsp;·&nbsp; Leadway Assurance Agricultural Insurance Division &nbsp;·&nbsp; NAICOM Licensed &nbsp;·&nbsp; Built for Nigeria & West Africa</footer>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <button class="popup-close" onclick="closePopup()">×</button>
+  <div class="popup-title" id="p-title"></div>
+  <div class="popup-body" id="p-body"></div>
+  <div class="popup-time" id="p-time"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const leadsData = [
+  {name:'Prosperity Poultry Farm Ltd',loc:'Kaduna, NW',sector:'Poultry',scale:'Commercial',score:'High',
+   products:['Poultry Mortality','Business Interruption','Fire & Perils'],premium:'₦3.2M',prob:82,source:'LinkedIn expansion'},
+  {name:'Green Valley Rice Cooperative',loc:'Kano, NW',sector:'Crop',scale:'Group (340 farmers)',score:'High',
+   products:['Multi-Peril Crop','Weather Index'],premium:'₦5.8M',prob:76,source:'CBN Anchor Borrower'},
+  {name:'Nile Aquaculture Ventures',loc:'Benue, NC',sector:'Fishery',scale:'Large commercial',score:'High',
+   products:['Aquaculture Insurance','Equipment Cover'],premium:'₦2.1M',prob:71,source:'NIRSAL-backed'},
+  {name:'Sunrise Greenhouse Ltd',loc:'Abuja, FCT',sector:'Greenhouse',scale:'Medium',score:'Med',
+   products:['Greenhouse Insurance','Fire & Perils'],premium:'₦1.4M',prob:58,source:'Google News'},
+  {name:'Kebbi Irrigation Farmers Assoc',loc:'Kebbi, NW',sector:'Crop',scale:'Cooperative (520)',score:'High',
+   products:['Dry Season Crop','Flood Insurance'],premium:'₦7.2M',prob:68,source:'FMARD release'},
+  {name:'Adamawa Dairy Ranch',loc:'Adamawa, NE',sector:'Livestock',scale:'Large ranch',score:'Med',
+   products:['Livestock Mortality','Transit Insurance'],premium:'₦1.9M',prob:52,source:'State ADP report'},
+];
+
+const notifsData = [
+  {type:'n-red',title:'⚠️ Flood Alert — Kebbi & Niger States',body:'NiMet warns of heavy rainfall & flooding in farming zones. Pitch flood insurance now.',time:'Just now'},
+  {type:'n-green',title:'🌱 New Lead: Plateau Maize Estate',body:'Commercial farm seeking expansion loan — NIRSAL-linked. High conversion potential.',time:'14 min ago'},
+  {type:'n-amber',title:'🐔 Poultry Disease — Newcastle, Kano',body:'3 LGAs affected. Contact poultry farms in surrounding areas urgently.',time:'32 min ago'},
+  {type:'n-green',title:'💰 FMARD Grant Scheme Announced',body:'₦15B earmarked for dry season farming. 2,400+ farmers eligible.',time:'1 hr ago'},
+  {type:'n-red',title:'🌡 Drought Watch — Borno & Yobe',body:'NIMET forecast: below-average rainfall. Pitch weather index insurance.',time:'2 hr ago'},
+  {type:'n-amber',title:'🔄 Renewal Due: 4 Policies Expiring',body:'Nile Farms, Kano Cooperative, Plateau Ranch — contact before end of week.',time:'3 hr ago'},
+];
+
+const targetsData = [
+  {name:'Kano Maize Co-op',detail:'Follow up on proposal sent Wed',action:'Call'},
+  {name:'Sunrise Greenhouse',detail:'Schedule site inspection',action:'Email'},
+  {name:'Plateau Ranch Ltd',detail:'Renewal due in 12 days',action:'WhatsApp'},
+  {name:'Benue Fish Farms',detail:'Submit quotation request',action:'Call'},
+];
+
+const newsData = [
+  {src:'Punch',hl:'CBN releases ₦50bn for AGSMEIS agric loans to smallholders',time:'8:14am'},
+  {src:'Vanguard',hl:'Kebbi State commissions 10,000ha irrigation project for dry season farming',time:'9:02am'},
+  {src:'FMARD',hl:'Ministry announces second season input distribution for 6 northern states',time:'10:30am'},
+  {src:'This Day',hl:'NIRSAL signs MoU with 14 state governments on anchor borrower expansion',time:'11:15am'},
+  {src:'BusinessDay',hl:'Nigerian poultry industry targets ₦2trn revenue by 2027 — APLPA',time:'12:00pm'},
+  {src:'Reuters',hl:'West Africa faces heightened flood risk this rainy season — ECOWAS report',time:'1:45pm'},
+];
+
+const govData = [
+  {src:'CBN',hl:'Anchor Borrower Programme: New batch of 85,000 farmers approved in 12 states',time:'Active now'},
+  {src:'BOA',hl:'Bank of Agriculture launches ₦10bn facility for commercial poultry & fishery',time:'New'},
+  {src:'NIRSAL',hl:'Agric Value Chain Financing — applications open for Q2 2026',time:'Deadline: Jun 30'},
+  {src:'AFDB',hl:'African Development Bank approves $120m for West Africa food security',time:'Ongoing'},
+  {src:'World Bank',hl:'Nigeria: $500m AGRIFIN program — 500,000 smallholder farmers targeted',time:'Active'},
+];
+
+const statesData = [
+  {name:'Kaduna',pct:92,count:'31 leads'},{name:'Kano',pct:88,count:'28 leads'},
+  {name:'Kebbi',pct:85,count:'24 leads'},{name:'Benue',pct:78,count:'21 leads'},
+  {name:'Plateau',pct:72,count:'18 leads'},{name:'Nasarawa',pct:65,count:'16 leads'},
+  {name:'Niger',pct:63,count:'14 leads'},{name:'Adamawa',pct:58,count:'13 leads'},
+  {name:'Oyo',pct:55,count:'12 leads'},{name:'Abuja',pct:50,count:'11 leads'},
+  {name:'Taraba',pct:45,count:'9 leads'},{name:'Jigawa',pct:40,count:'8 leads'},
+];
+
+const weatherData = [
+  {icon:'⛈',state:'Kebbi',cond:'Heavy rain',risk:'wr-high'},
+  {icon:'🌧',state:'Niger',cond:'Flooding risk',risk:'wr-high'},
+  {icon:'🌤',state:'Kaduna',cond:'Partly cloudy',risk:'wr-med'},
+  {icon:'☀️',state:'Kano',cond:'Dry & hot',risk:'wr-med'},
+  {icon:'⛅',state:'Plateau',cond:'Overcast',risk:'wr-low'},
+  {icon:'🌦',state:'Benue',cond:'Showers',risk:'wr-med'},
+  {icon:'☀️',state:'Abuja',cond:'Clear',risk:'wr-low'},
+  {icon:'🌩',state:'Borno',cond:'Drought watch',risk:'wr-high'},
+];
+
+const pipelineData = [
+  {farm:'Prosperity Poultry Farm',loc:'Kaduna',sector:'Poultry',cover:'Poultry Mortality + BI',premium:'₦3.2M',priority:'High',conv:82,pc:'#2e7d32'},
+  {farm:'Green Valley Rice Coop',loc:'Kano',sector:'Crop',cover:'MPCI + Weather Index',premium:'₦5.8M',priority:'High',conv:76,pc:'#2e7d32'},
+  {farm:'Nile Aquaculture',loc:'Benue',sector:'Fishery',cover:'Aquaculture + Equipment',premium:'₦2.1M',priority:'High',conv:71,pc:'#2e7d32'},
+  {farm:'Kebbi Irrigation Farmers',loc:'Kebbi',sector:'Crop',cover:'Dry Season + Flood',premium:'₦7.2M',priority:'High',conv:68,pc:'#2e7d32'},
+  {farm:'Sunrise Greenhouse',loc:'Abuja',sector:'Greenhouse',cover:'Greenhouse + Fire & Perils',premium:'₦1.4M',priority:'Med',conv:58,pc:'#e67e22'},
+  {farm:'Adamawa Dairy Ranch',loc:'Adamawa',sector:'Livestock',cover:'Livestock Mortality',premium:'₦1.9M',priority:'Med',conv:52,pc:'#e67e22'},
+  {farm:'Plateau Maize Estate',loc:'Plateau',sector:'Crop',cover:'MPCI + Business Int.',premium:'₦2.6M',priority:'High',conv:65,pc:'#2e7d32'},
+];
+
+const tickerData = [
+  {label:'Maize (90kg)',val:'₦52,500',chg:'+2.1%',up:true},
+  {label:'Rice (50kg)',val:'₦95,000',chg:'+0.8%',up:true},
+  {label:'Soybean (50kg)',val:'₦68,000',chg:'-1.2%',up:false},
+  {label:'Groundnut',val:'₦74,000',chg:'+3.5%',up:true},
+  {label:'Catfish (live/kg)',val:'₦2,800',chg:'+1.4%',up:true},
+  {label:'Broiler (live)',val:'₦6,400',chg:'-0.5%',up:false},
+  {label:'Cattle (grade A)',val:'₦850,000',chg:'+2.8%',up:true},
+  {label:'Cassava (100kg)',val:'₦58,000',chg:'+1.1%',up:true},
+  {label:'Sorghum (100kg)',val:'₦43,500',chg:'+1.9%',up:true},
+  {label:'Palm Oil (25L)',val:'₦38,000',chg:'-0.3%',up:false},
+];
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function renderLeads(){
+  document.getElementById('leads').innerHTML = leadsData.map(l=>`
+    <div class="lead" onclick="q('Draft a professional pitch for ${l.name}, a ${l.sector} operation in ${l.loc}')">
+      <div class="lead-top">
+        <div class="lead-name">${l.name}</div>
+        <span class="score ${l.score==='High'?'s-high':l.score==='Med'?'s-med':'s-low'}">${l.score} Priority</span>
+      </div>
+      <div class="lead-meta">
+        <span>📍 ${l.loc}</span>
+        <span>🏭 ${l.scale}</span>
+        <span>💰 ${l.premium} est.</span>
+      </div>
+      <div class="lead-tags">
+        ${l.products.map(p=>`<span class="tag tg">${p}</span>`).join('')}
+        <span class="tag tb">${l.prob}% conv.</span>
+        <span class="tag to">via ${l.source}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderNotifs(){
+  document.getElementById('notifs').innerHTML = notifsData.map(n=>`
+    <div class="notif ${n.type}">
+      <div class="notif-title">${n.title}</div>
+      <div class="notif-body">${n.body}</div>
+      <div class="notif-time">${n.time}</div>
+    </div>`).join('');
+}
+
+function renderTargets(){
+  document.getElementById('targets').innerHTML = targetsData.map((t,i)=>`
+    <div class="tgt">
+      <div class="tgt-num">${i+1}</div>
+      <div class="tgt-info">
+        <div class="tgt-name">${t.name}</div>
+        <div class="tgt-detail">${t.detail}</div>
+      </div>
+      <button class="tgt-btn" onclick="q('Help me ${t.action.toLowerCase()} ${t.name} about: ${t.detail}')">${t.action} ↗</button>
+    </div>`).join('');
+}
+
+function renderNews(){
+  document.getElementById('news').innerHTML = newsData.map(n=>`
+    <div class="news-item" onclick="q('How can I use this news to find insurance leads: ${n.hl}')">
+      <div class="news-src">${n.src}</div>
+      <div class="news-hl">${n.hl}</div>
+      <div class="news-time">${n.time}</div>
+    </div>`).join('');
+  document.getElementById('gov').innerHTML = govData.map(n=>`
+    <div class="news-item" onclick="q('How can I leverage this for agric insurance sales: ${n.hl}')">
+      <div class="news-src">${n.src}</div>
+      <div class="news-hl">${n.hl}</div>
+      <div class="news-time">${n.time}</div>
+    </div>`).join('');
+}
+
+function renderStates(){
+  document.getElementById('states').innerHTML = statesData.map(s=>`
+    <div class="state-item">
+      <div class="state-name">${s.name}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${s.pct}%"></div></div>
+      <div class="state-count">${s.count}</div>
+    </div>`).join('');
+}
+
+function renderWeather(){
+  document.getElementById('weather').innerHTML = weatherData.map(w=>`
+    <div class="weather-item">
+      <div class="w-icon">${w.icon}</div>
+      <div class="w-state">${w.state}</div>
+      <div class="w-cond">${w.cond}</div>
+      <span class="w-risk ${w.risk}">${w.risk.replace('wr-','').toUpperCase()}</span>
+    </div>`).join('');
+}
+
+function renderPipeline(){
+  document.getElementById('pipeline').innerHTML = pipelineData.map(o=>`
+    <tr>
+      <td><strong>${o.farm}</strong></td>
+      <td>${o.loc}</td>
+      <td><span class="tag tb">${o.sector}</span></td>
+      <td>${o.cover}</td>
+      <td style="font-weight:700;color:var(--green)">${o.premium}</td>
+      <td style="font-weight:700;color:${o.pc}">${o.priority}</td>
+      <td>
+        <div class="prog-wrap">
+          <div class="prog-bar"><div class="prog-fill" style="width:${o.conv}%;background:${o.pc}"></div></div>
+          <span style="font-size:10px;font-family:var(--mono);min-width:28px">${o.conv}%</span>
+        </div>
+      </td>
+      <td><button class="pitch-btn" onclick="q('Draft a full insurance pitch for ${o.farm} in ${o.loc} for ${o.cover}')">Pitch ↗</button></td>
+    </tr>`).join('');
+}
+
+function renderTicker(){
+  const items = [...tickerData,...tickerData];
+  document.getElementById('ticker').innerHTML = items.map(t=>
+    `<span class="ticker-item">
+      <span class="t-label">📊 ${t.label}</span>
+      <strong style="color:#fff">${t.val}</strong>
+      <span class="${t.up?'t-up':'t-dn'}">${t.chg}</span>
+    </span>`).join('');
+}
+
+function renderChart(){
+  new Chart(document.getElementById('chart'),{
+    type:'bar',
+    data:{
+      labels:['Discovered','Contacted','Proposed','Quoted','Converted'],
+      datasets:[{
+        label:'Leads',
+        data:[142,87,54,31,18],
+        backgroundColor:['#c8e6c9','#a5d6a7','#66bb6a','#43a047','#1a5c38'],
+        borderRadius:6,
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11,family:'DM Mono'}}},
+        x:{grid:{display:false},ticks:{font:{size:11,family:'Plus Jakarta Sans'}}}
+      }
+    }
+  });
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────
+function updateClock(){
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+setInterval(updateClock,1000); updateClock();
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+function tabSwitch(el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ── REFRESH ───────────────────────────────────────────────────────────────
+function refreshLeads(){
+  renderLeads();
+  showPopup('var(--green)','✅ Leads Refreshed','Found 2 new leads in your territory since last refresh.');
+}
+
+// ── POPUP ─────────────────────────────────────────────────────────────────
+function showPopup(color,title,body){
+  const p=document.getElementById('popup');
+  p.style.borderColor=color;
+  p.style.display='block';
+  document.getElementById('p-title').textContent=title;
+  document.getElementById('p-body').textContent=body;
+  document.getElementById('p-time').textContent=new Date().toLocaleTimeString('en-NG');
+  clearTimeout(window._pt);
+  window._pt=setTimeout(()=>{p.style.display='none'},6000);
+}
+function closePopup(){document.getElementById('popup').style.display='none';}
+
+// ── AUTO POPUPS ────────────────────────────────────────────────────────────
+const autoPopups=[
+  ['var(--green)','🌱 New Lead Detected','Plateau Maize Estate (Kaduna) — ₦4.2M est. premium opportunity.'],
+  ['var(--red)','⚠️ Flood Risk Alert','NiMet: flood alert for Niger & Kebbi — contact farmers immediately.'],
+  ['var(--amber)','🔄 Renewal Reminder','Plateau Ranch policy expires in 8 days — schedule follow-up now.'],
+  ['var(--green)','💰 CBN Anchor Borrower','New batch: 8,500 farmers in your territory now eligible for coverage.'],
+  ['var(--red)','🐔 Disease Alert','Newcastle outbreak reported in Kano LGA — pitch poultry mortality cover.'],
+];
+let _pi=0;
+setTimeout(function cycle(){
+  const [c,t,b]=autoPopups[_pi%autoPopups.length];
+  showPopup(c,t,b); _pi++;
+  setTimeout(cycle,20000);
+},5000);
+
+// ── AI ─────────────────────────────────────────────────────────────────────
+function q(text){
+  document.getElementById('ai-in').value=text;
+  document.getElementById('ai-in').focus();
+}
+
+async function runAI(){
+  const input=document.getElementById('ai-in').value.trim();
+  if(!input) return;
+  const btn=document.getElementById('ai-btn');
+  const out=document.getElementById('ai-out');
+  const think=document.getElementById('ai-think');
+  btn.disabled=true; btn.textContent='Generating...';
+  out.style.display='none';
+  think.style.display='flex';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`You are an expert agricultural insurance sales AI assistant for Leadway Assurance Company Limited, Nigeria.
+You help insurance sales executives identify leads, draft proposals, pitch strategies, and analyze farm risks across Nigeria and West Africa.
+Key products: Multi-Peril Crop Insurance, Poultry Mortality Insurance, Fishery/Aquaculture Insurance, Livestock Insurance, Greenhouse Insurance, Weather Index Insurance, Fire & Special Perils, Business Interruption, Equipment Breakdown, Goods-in-Transit, Group Life.
+Key programs: CBN Anchor Borrower, NIRSAL, AGSMEIS, Bank of Agriculture, FMARD, State ADPs.
+Nigerian regulator: NAICOM. Key seasons: First season March–July, Second season August–November, Dry season November–March.
+Key risk zones: Kebbi, Niger (flooding), Borno/Yobe (drought), Kaduna/Kano (disease), Benue (fishery).
+Always be concise, professional, Nigeria-specific, and action-oriented. Use ₦ for currency. Format responses with clear sections using line breaks.`,
+        messages:[{role:'user',content:input}]
+      })
+    });
+    const data=await res.json();
+    const text=data.content?.map(c=>c.text||'').join('')||'No response received.';
+    out.textContent=text;
+    out.style.display='block';
+  }catch(e){
+    out.textContent='⚠️ Could not connect to AI. Please check your internet connection and try again.';
+    out.style.display='block';
+  }finally{
+    btn.disabled=false; btn.textContent='Generate ↗';
+    think.style.display='none';
+  }
+}
+
+// Enter key support
+document.getElementById('ai-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey)runAI();});
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+renderLeads();
+renderNotifs();
+renderTargets();
+renderNews();
+renderStates();
+renderWeather();
+renderPipeline();
+renderTicker();
+renderChart();
+</script>
+</body>
+</html>
