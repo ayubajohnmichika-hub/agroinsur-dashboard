@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AgroInsure Intelligence Hub — Leadway Assurance</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#1a5c38;--green2:#0d3d20;--green-lt:#e8f5ed;--green-mid:#2e7d52;
+  --gold:#c9a84c;--gold-lt:#fdf6e3;
+  --red:#c0392b;--red-lt:#fdecea;
+  --amber:#e67e22;--amber-lt:#fef5ec;
+  --blue:#1565c0;--blue-lt:#e3f0ff;
+  --bg:#f4f6f3;--card:#fff;--border:#e2e8e0;
+  --text:#1a1f18;--text2:#5a6b58;--text3:#8fa08c;
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'DM Mono',monospace;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(135deg,var(--green2) 0%,var(--green) 100%);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand-name{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.brand-sub{font-size:11px;opacity:.65;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:16px;font-size:12px}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);padding:5px 12px;border-radius:20px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4caf50;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.topbar-time{opacity:.8;font-family:var(--mono);font-size:11px}
+
+/* ── TICKER ── */
+.ticker-bar{background:#111;padding:7px 0;overflow:hidden;border-bottom:2px solid var(--gold)}
+.ticker-track{display:flex;animation:ticker 40s linear infinite;white-space:nowrap}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 28px;font-size:11px;color:#ccc;font-family:var(--mono);border-right:1px solid #333}
+.t-up{color:#4caf50}.t-dn{color:#ef5350}.t-label{color:#888}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1400px;margin:0 auto;padding:16px 20px}
+
+/* ── METRICS ── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.metric{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer;transition:.15s}
+.metric:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.metric::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 var(--radius) 0 60px;opacity:.07}
+.metric.green::before{background:var(--green)}.metric.red::before{background:var(--red)}
+.metric.amber::before{background:var(--amber)}.metric.blue::before{background:var(--blue)}
+.metric-icon{font-size:20px;margin-bottom:8px}
+.metric-label{font-size:11px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.metric-val{font-size:28px;font-weight:700;color:var(--text);line-height:1;font-family:var(--mono)}
+.metric-delta{font-size:11px;margin-top:5px}
+.d-up{color:#2e7d32}.d-dn{color:#c62828}.d-warn{color:#e67e22}
+
+/* ── AI BOX ── */
+.ai-box{background:linear-gradient(135deg,var(--green2) 0%,#1a5c38 60%,#2e7d52 100%);border-radius:var(--radius);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden}
+.ai-box::after{content:'🌿';position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:80px;opacity:.07}
+.ai-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ai-avatar{width:38px;height:38px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ai-title{font-size:14px;font-weight:700}
+.ai-sub{font-size:11px;opacity:.6;margin-top:2px}
+.ai-row{display:flex;gap:10px}
+.ai-input{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);padding:10px 14px;color:#fff;font-size:12px;font-family:var(--font);outline:none;transition:.2s}
+.ai-input:focus{background:rgba(255,255,255,.15);border-color:var(--gold)}
+.ai-input::placeholder{color:rgba(255,255,255,.4)}
+.ai-btn{background:var(--gold);color:#3d2a00;border:none;border-radius:var(--radius-sm);padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:.15s}
+.ai-btn:hover{background:#dbb94f;transform:translateY(-1px)}
+.ai-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.quick-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.qtag{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;transition:.15s;font-family:var(--font)}
+.qtag:hover{background:rgba(255,255,255,.2)}
+.ai-response{margin-top:12px;background:rgba(0,0,0,.2);border-radius:var(--radius-sm);padding:14px;font-size:12px;line-height:1.7;color:rgba(255,255,255,.9);display:none;white-space:pre-wrap;max-height:280px;overflow-y:auto}
+.ai-thinking{display:none;align-items:center;gap:8px;margin-top:10px;font-size:12px;opacity:.7}
+.dot-anim span{display:inline-block;width:5px;height:5px;border-radius:50%;background:#fff;animation:dotpulse 1.2s infinite;margin:0 2px}
+.dot-anim span:nth-child(2){animation-delay:.2s}.dot-anim span:nth-child(3){animation-delay:.4s}
+@keyframes dotpulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ── GRID ── */
+.main-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:16px}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:16px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text)}
+.card-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.ci-green{background:var(--green-lt)}.ci-red{background:var(--red-lt)}.ci-gold{background:var(--gold-lt)}.ci-blue{background:var(--blue-lt)}
+.card-action{font-size:11px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:4px 8px;border-radius:6px}
+.card-action:hover{background:var(--bg);color:var(--green)}
+
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px}
+.tab{font-size:11px;padding:7px 14px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;transition:.15s}
+.tab.on{color:var(--green);border-color:var(--green)}
+
+/* ── LEADS ── */
+.lead-list{display:flex;flex-direction:column;gap:8px}
+.lead{border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:.15s}
+.lead:hover{border-color:var(--green);box-shadow:0 2px 8px rgba(26,92,56,.1);transform:translateY(-1px)}
+.lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.lead-name{font-size:13px;font-weight:700;color:var(--text)}
+.score{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;white-space:nowrap}
+.s-high{background:#e8f5e9;color:#1b5e20}.s-med{background:#fff8e1;color:#e65100}.s-low{background:#fce4ec;color:#880e4f}
+.lead-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--text2);margin-bottom:6px}
+.lead-tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px}
+.tg{background:var(--green-lt);color:var(--green)}.tb{background:var(--blue-lt);color:var(--blue)}.to{background:var(--gold-lt);color:#7a5f00}
+
+/* ── NOTIFS ── */
+.notif-list{display:flex;flex-direction:column;gap:8px}
+.notif{border-radius:var(--radius-sm);padding:11px 13px;border-left:3px solid;background:var(--bg);cursor:pointer;transition:.15s}
+.notif:hover{transform:translateX(3px);filter:brightness(.97)}
+.n-red{border-color:var(--red)}.n-green{border-color:#2e7d32}.n-amber{border-color:var(--amber)}
+.notif-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.notif-body{font-size:11px;color:var(--text2);line-height:1.5}
+.notif-time{font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+
+/* ── TARGETS ── */
+.target-list{display:flex;flex-direction:column}
+.tgt{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.tgt:last-child{border-bottom:none}
+.tgt:hover{background:var(--bg);padding-left:6px;border-radius:6px}
+.tgt-num{font-size:11px;color:var(--text3);font-family:var(--mono);min-width:18px}
+.tgt-info{flex:1}
+.tgt-name{font-size:12px;font-weight:600;color:var(--text)}
+.tgt-detail{font-size:11px;color:var(--text2)}
+.tgt-btn{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--green-lt);color:var(--green);border:1px solid #a5d6a7;cursor:pointer;font-family:var(--font);font-weight:600}
+.tgt-btn:hover{background:#c8e6c9}
+
+/* ── TWO/THREE COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* ── NEWS ── */
+.news-list{display:flex;flex-direction:column}
+.news-item{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.news-item:last-child{border-bottom:none}
+.news-item:hover{padding-left:6px;background:var(--bg);border-radius:6px}
+.news-src{font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.news-hl{font-size:12px;color:var(--text);line-height:1.4;font-weight:500}
+.news-time{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+
+/* ── SECTORS ── */
+.sector-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;cursor:pointer;transition:.15s}
+.sector-card:hover{border-color:var(--green);box-shadow:0 4px 16px rgba(26,92,56,.08);transform:translateY(-2px)}
+.sector-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.sector-emoji{font-size:22px}.sector-name{font-size:13px;font-weight:700}
+.sector-num{font-size:26px;font-weight:700;font-family:var(--mono);margin-bottom:2px}
+.sector-lbl{font-size:11px;color:var(--text2);margin-bottom:10px}
+.sector-rows{display:flex;flex-direction:column;gap:5px}
+.srow{display:flex;justify-content:space-between;font-size:11px}
+.srow-k{color:var(--text2)}.srow-v{font-weight:600;color:var(--text)}
+
+/* ── STATES ── */
+.state-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.state-item{background:var(--bg);border-radius:var(--radius-sm);padding:9px;cursor:pointer;transition:.15s}
+.state-item:hover{background:#dde8da;transform:scale(1.02)}
+.state-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px}
+.bar-wrap{height:4px;background:var(--border);border-radius:2px;margin-bottom:3px}
+.bar-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--green-mid))}
+.state-count{font-size:10px;color:var(--text3);font-family:var(--mono)}
+
+/* ── WEATHER ── */
+.weather-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.weather-item{background:var(--bg);border-radius:var(--radius-sm);padding:10px;text-align:center;cursor:pointer;transition:.15s}
+.weather-item:hover{transform:translateY(-2px);background:#dde8da}
+.w-icon{font-size:22px;margin-bottom:4px}.w-state{font-size:11px;font-weight:700;color:var(--text)}
+.w-cond{font-size:10px;color:var(--text2);margin-bottom:4px}
+.w-risk{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block;font-weight:600}
+.wr-high{background:var(--red-lt);color:var(--red)}.wr-med{background:var(--amber-lt);color:var(--amber)}.wr-low{background:var(--green-lt);color:var(--green)}
+
+/* ── PIPELINE ── */
+.pipe-table{width:100%;border-collapse:collapse;font-size:11px}
+.pipe-table th{text-align:left;color:var(--text2);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--border);white-space:nowrap;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+.pipe-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+.pipe-table tr:last-child td{border-bottom:none}
+.pipe-table tbody tr{cursor:pointer;transition:.15s}
+.pipe-table tbody tr:hover td{background:var(--green-lt)}
+.prog-wrap{display:flex;align-items:center;gap:6px}
+.prog-bar{height:5px;border-radius:3px;flex:1;background:var(--border);overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+.pitch-btn{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--green-lt);color:var(--green);border:1px solid #a5d6a7;cursor:pointer;font-family:var(--font);font-weight:600}
+.pitch-btn:hover{background:#c8e6c9}
+
+/* ── CHART ── */
+.chart-wrap{position:relative;width:100%;height:180px}
+
+/* ── SECTION LABEL ── */
+.section-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.section-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── SMALL POPUP ── */
+.popup{position:fixed;top:16px;right:16px;width:280px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:200;border-left:4px solid var(--green);display:none;animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:translateX(20px) scale(.95);opacity:0}to{transform:none;opacity:1}}
+.popup-close{position:absolute;top:8px;right:10px;background:none;border:none;font-size:16px;cursor:pointer;color:var(--text3)}
+.popup-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;padding-right:16px}
+.popup-body{font-size:11px;color:var(--text2);line-height:1.5}
+.popup-time{font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--mono)}
+
+/* ── DETAIL MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--card);border-radius:16px;width:100%;max-width:700px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.2);animation:slideUp .25s cubic-bezier(.34,1.2,.64,1)}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.modal-header{background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;padding:18px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0}
+.modal-header-left{display:flex;align-items:center;gap:12px}
+.modal-emoji{font-size:28px;flex-shrink:0}
+.modal-htitle{font-size:15px;font-weight:700;margin-bottom:2px}
+.modal-hsub{font-size:11px;opacity:.65}
+.modal-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
+.modal-close:hover{background:rgba(255,255,255,.25)}
+.modal-body{padding:20px;overflow-y:auto;flex:1}
+.modal-section{margin-bottom:18px}
+.modal-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.modal-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.modal-kv{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.modal-kv-item{background:var(--bg);border-radius:8px;padding:10px 12px}
+.modal-kv-k{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.modal-kv-v{font-size:12px;font-weight:600;color:var(--text)}
+.modal-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.modal-ai-area{background:var(--green2);border-radius:10px;padding:14px}
+.modal-ai-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.5);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.modal-ai-content{font-size:12px;line-height:1.75;color:rgba(255,255,255,.9);white-space:pre-wrap;min-height:60px}
+.modal-ai-loading{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6)}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:var(--bg)}
+.mf-btn{flex:1;padding:10px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);border:none;transition:.15s}
+.mf-primary{background:var(--green);color:#fff}
+.mf-primary:hover{background:var(--green2)}
+.mf-secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.mf-secondary:hover{background:var(--green-lt);color:var(--green)}
+.mf-gold{background:var(--gold);color:#3d2a00}
+.mf-gold:hover{background:#dbb94f}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:8px}
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#c5d5c2;border-radius:3px}
+
+@media(max-width:900px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .main-grid{grid-template-columns:1fr}
+  .two-col,.three-col{grid-template-columns:1fr}
+  .weather-grid{grid-template-columns:repeat(2,1fr)}
+  .state-grid{grid-template-columns:repeat(2,1fr)}
+  .modal-kv{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .wrap{padding:10px 12px}
+  .topbar{padding:10px 12px}
+  .weather-grid{grid-template-columns:repeat(2,1fr)}
+  .modal-footer{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-icon">🌾</div>
+    <div>
+      <div class="brand-name">AgroInsure Intelligence Hub</div>
+      <div class="brand-sub">Leadway Assurance · Agricultural Insurance Division</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-pill"><div class="live-dot"></div><span>LIVE</span></div>
+    <span class="topbar-time" id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric green" onclick="openMetric('leads')">
+      <div class="metric-icon">🎯</div>
+      <div class="metric-label">Hot Leads Today</div>
+      <div class="metric-val">24</div>
+      <div class="metric-delta d-up">▲ +6 since 8am · Click for details</div>
+    </div>
+    <div class="metric amber" onclick="openMetric('premium')">
+      <div class="metric-icon">₦</div>
+      <div class="metric-label">Est. Premium Pool</div>
+      <div class="metric-val">48M</div>
+      <div class="metric-delta d-up">▲ ₦12M new today · Click for breakdown</div>
+    </div>
+    <div class="metric red" onclick="openMetric('weather')">
+      <div class="metric-icon">⚠️</div>
+      <div class="metric-label">Weather Alerts</div>
+      <div class="metric-val" style="color:var(--red)">7</div>
+      <div class="metric-delta d-dn">▼ 3 flood risk zones · Click for map</div>
+    </div>
+    <div class="metric blue" onclick="openMetric('followups')">
+      <div class="metric-icon">📅</div>
+      <div class="metric-label">Follow-ups Due</div>
+      <div class="metric-val">11</div>
+      <div class="metric-delta d-warn">4 overdue · Click to review</div>
+    </div>
+  </div>
+
+  <!-- AI ASSISTANT -->
+  <div class="ai-box">
+    <div class="ai-head">
+      <div class="ai-avatar">🤖</div>
+      <div>
+        <div class="ai-title">AI Sales Assistant — Powered by Claude</div>
+        <div class="ai-sub">Draft proposals · Pitch strategies · Risk analysis · WhatsApp messages · Intro emails</div>
+      </div>
+    </div>
+    <div class="ai-row">
+      <input class="ai-input" id="ai-in" placeholder="e.g. Draft a proposal for a poultry farm in Kaduna..."/>
+      <button class="ai-btn" id="ai-btn" onclick="runAI()">Generate ↗</button>
+    </div>
+    <div class="quick-tags">
+      <span class="qtag" onclick="q('Draft intro email for Prosperity Poultry Farm Ltd Kaduna')">Poultry farm email</span>
+      <span class="qtag" onclick="q('Recommend insurance for a rice cooperative in Kano with CBN Anchor Borrower funding')">Rice cooperative pitch</span>
+      <span class="qtag" onclick="q('Write a WhatsApp pitch for a greenhouse operator in Abuja FCT')">Greenhouse WhatsApp</span>
+      <span class="qtag" onclick="q('Analyze flood risk for farms in Kebbi State and recommend cover')">Flood risk analysis</span>
+      <span class="qtag" onclick="q('Talking points before meeting a catfish farm owner in Benue')">Meeting talking points</span>
+    </div>
+    <div class="ai-thinking" id="ai-think"><div class="dot-anim"><span></span><span></span><span></span></div> Generating your response...</div>
+    <div class="ai-response" id="ai-out"></div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title"><div class="card-icon ci-green">🔥</div> Hot Insurance Leads</div>
+        <button class="card-action" onclick="refreshLeads()">↻ Refresh</button>
+      </div>
+      <div class="tabs">
+        <div class="tab on" onclick="tabSwitch(this)">All</div>
+        <div class="tab" onclick="tabSwitch(this)">Crop</div>
+        <div class="tab" onclick="tabSwitch(this)">Poultry</div>
+        <div class="tab" onclick="tabSwitch(this)">Fishery</div>
+        <div class="tab" onclick="tabSwitch(this)">Livestock</div>
+      </div>
+      <div class="lead-list" id="leads"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title"><div class="card-icon ci-red">🔔</div> Live Alerts</div>
+          <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">8 NEW</span>
+        </div>
+        <div class="notif-list" id="notifs"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title"><div class="card-icon ci-gold">✅</div> Today's Contacts</div>
+        </div>
+        <div class="target-list" id="targets"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTORS -->
+  <div class="section-lbl">Sector Monitors</div>
+  <div class="three-col" id="sectors"></div>
+
+  <!-- NEWS + STATES -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hd"><div class="card-title"><div class="card-icon ci-green">📰</div> Today's Agricultural Headlines</div></div>
+      <div class="news-list" id="news"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title"><div class="card-icon ci-blue">📍</div> State Activity Index</div></div>
+      <div class="state-grid" id="states"></div>
+    </div>
+  </div>
+
+  <!-- WEATHER + GOV -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hd"><div class="card-title"><div class="card-icon ci-red">🌧</div> Weather Risk Monitor</div></div>
+      <div class="weather-grid" id="weather"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title"><div class="card-icon ci-gold">🏛</div> Gov Programs & Grants</div></div>
+      <div class="news-list" id="gov"></div>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hd">
+      <div class="card-title"><div class="card-icon ci-green">📊</div> Insurance Opportunities Pipeline</div>
+      <span style="font-size:10px;color:var(--text3)">Click any row for full analysis</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="pipe-table">
+        <thead><tr>
+          <th>Farm / Company</th><th>Location</th><th>Sector</th>
+          <th>Recommended Cover</th><th>Est. Premium</th>
+          <th>Priority</th><th>Conversion</th><th>Action</th>
+        </tr></thead>
+        <tbody id="pipeline"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hd"><div class="card-title"><div class="card-icon ci-green">📈</div> Monthly Lead Funnel</div></div>
+    <div class="chart-wrap"><canvas id="chart"></canvas></div>
+  </div>
+
+</div>
+<footer>AgroInsure Intelligence Hub &nbsp;·&nbsp; Leadway Assurance Agricultural Insurance Division &nbsp;·&nbsp; NAICOM Licensed &nbsp;·&nbsp; Nigeria & West Africa</footer>
+
+<!-- SMALL POPUP -->
+<div class="popup" id="popup">
+  <button class="popup-close" onclick="closePopup()">×</button>
+  <div class="popup-title" id="p-title"></div>
+  <div class="popup-body" id="p-body"></div>
+  <div class="popup-time" id="p-time"></div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-emoji" id="m-emoji">📋</div>
+        <div>
+          <div class="modal-htitle" id="m-title">Detail View</div>
+          <div class="modal-hsub" id="m-sub">Loading...</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModalBtn()">×</button>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+    <div class="modal-footer" id="m-footer"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const leadsData = [
+  {name:'Prosperity Poultry Farm Ltd',loc:'Kaduna, NW',sector:'Poultry',scale:'Commercial (est. 50,000 birds)',score:'High',
+   products:['Poultry Mortality','Business Interruption','Fire & Perils'],premium:'₦3.2M',prob:82,source:'LinkedIn expansion post',
+   contact:'Managing Director',phone:'+234 XXX XXX XXXX',risk:'High disease & fire exposure',
+   desc:'Large-scale commercial poultry farm recently announced flock expansion. Kaduna-based with strong northern Nigeria market reach. Expansion signals significant new insurance need.'},
+  {name:'Green Valley Rice Cooperative',loc:'Kano, NW',sector:'Crop',scale:'Group (340 farmers, 680ha)',score:'High',
+   products:['Multi-Peril Crop','Weather Index'],premium:'₦5.8M',prob:76,source:'CBN Anchor Borrower list',
+   contact:'Cooperative Chairman',phone:'+234 XXX XXX XXXX',risk:'Weather, flood & pest exposure',
+   desc:'Large rice cooperative enrolled in CBN Anchor Borrower Programme. 340 member farmers across 680 hectares. Government-backed financing makes insurance mandatory and conversion straightforward.'},
+  {name:'Nile Aquaculture Ventures',loc:'Benue, NC',sector:'Fishery',scale:'Large commercial (42 ponds)',score:'High',
+   products:['Aquaculture Insurance','Equipment Cover'],premium:'₦2.1M',prob:71,source:'NIRSAL-backed project',
+   contact:'CEO',phone:'+234 XXX XXX XXXX',risk:'Disease, theft & equipment failure',
+   desc:'NIRSAL-backed catfish and tilapia production facility with 42 ponds. Benue River proximity creates both water access advantage and flood risk. Strong conversion probability due to lender requirement.'},
+  {name:'Sunrise Greenhouse Ltd',loc:'Abuja, FCT',sector:'Greenhouse',scale:'Medium (2.4ha under cover)',score:'Med',
+   products:['Greenhouse Insurance','Fire & Perils'],premium:'₦1.4M',prob:58,source:'Google News article',
+   contact:'Operations Manager',phone:'+234 XXX XXX XXXX',risk:'Structural & crop loss',
+   desc:'Modern greenhouse vegetable farm serving Abuja hospitality and retail market. Recent press coverage on expansion plans. FCT market commands premium pricing, supporting insurance affordability.'},
+  {name:'Kebbi Irrigation Farmers Assoc',loc:'Kebbi, NW',sector:'Crop',scale:'Cooperative (520 farmers)',score:'High',
+   products:['Dry Season Crop','Flood Insurance'],premium:'₦7.2M',prob:68,source:'FMARD press release',
+   contact:'Association President',phone:'+234 XXX XXX XXXX',risk:'Flood, drought & market risk',
+   desc:'Government-recognized irrigation farming association in Kebbi State. Dry season farming along the Rima River. FMARD recently profiled them in an intervention announcement — strong government linkage.'},
+  {name:'Adamawa Dairy Ranch',loc:'Adamawa, NE',sector:'Livestock',scale:'Large ranch (380 cattle)',score:'Med',
+   products:['Livestock Mortality','Transit Insurance'],premium:'₦1.9M',prob:52,source:'State ADP report',
+   contact:'Ranch Manager',phone:'+234 XXX XXX XXXX',risk:'FMD, theft & transit mortality',
+   desc:'Commercial dairy and beef cattle operation in Adamawa. ADP report flags the ranch as seeking commercial financing. FMD watch in the area makes mortality cover especially relevant right now.'},
+];
+
+const notifsData = [
+  {type:'n-red',emoji:'⚠️',title:'Flood Alert — Kebbi & Niger States',
+   body:'NiMet warns of heavy rainfall & flooding in farming zones. Pitch flood insurance now.',time:'Just now',
+   detail:'NiMet has issued a flood advisory for Kebbi and Niger States following above-average rainfall in the upper River Niger catchment. Farming communities along the Rima and Niger river plains are most exposed. This is an urgent sales window — farm operators in these zones typically have 48–72 hours before decisions are made. Recommended immediate action: contact all known farms in Kebbi (especially Kebbi Irrigation Farmers Assoc) and Minna surrounds today with a flood insurance call-to-action.',
+   action:'Draft urgent flood insurance pitch'},
+  {type:'n-green',emoji:'🌱',title:'New Lead: Plateau Maize Estate',
+   body:'Commercial farm seeking expansion loan — NIRSAL-linked. High conversion potential.',time:'14 min ago',
+   detail:'Plateau Maize Estate (Jos, Plateau State) has been identified as a NIRSAL-linked commercial maize operation currently seeking expansion financing. NIRSAL-linked farms are required to carry insurance as a condition of loan disbursement, making this a high-probability conversion. The farm operates approximately 200ha of maize under second-season cultivation. Estimated premium: ₦2.6M for Multi-Peril Crop Insurance plus Business Interruption.',
+   action:'Draft NIRSAL loan insurance pitch for Plateau Maize Estate'},
+  {type:'n-amber',emoji:'🐔',title:'Poultry Disease Alert — Newcastle, Kano',
+   body:'3 LGAs affected. Contact poultry farms in surrounding areas urgently.',time:'32 min ago',
+   detail:'Newcastle Disease (ND) outbreak confirmed in 3 LGAs in Kano State: Kano Municipal, Fagge, and Gwale. The outbreak follows a vaccination gap reported by the Kano State ADP. Any uninsured farms within a 50km radius face total flock loss exposure. This is both a risk warning and an immediate sales opportunity — farms that have not experienced losses yet are most likely to convert. Priority contacts: all Kano-area poultry farms not yet covered under Leadway poultry mortality policies.',
+   action:'Draft urgent disease-risk pitch for Kano poultry farms'},
+  {type:'n-green',emoji:'💰',title:'FMARD Grant Scheme Announced',
+   body:'₦15B earmarked for dry season farming. 2,400+ farmers eligible.',time:'1 hr ago',
+   detail:'The Federal Ministry of Agriculture and Rural Development (FMARD) has announced a ₦15 billion intervention for dry season farming targeting 2,400+ farmers across 8 states including Kebbi, Niger, Sokoto, Kano, Kaduna, Borno, Adamawa, and Taraba. Grant beneficiaries are required by CBN guidelines to carry agricultural insurance. This creates an immediate pipeline of 2,400 potential policyholders. Recommended strategy: contact the State ADP offices in each state to request the beneficiary list and position Leadway as the preferred insurer.',
+   action:'Draft letter to FMARD/State ADP requesting beneficiary list'},
+  {type:'n-red',emoji:'🌡',title:'Drought Watch — Borno & Yobe',
+   body:'NIMET seasonal forecast: below-average rainfall. Pitch weather index insurance.',time:'2 hr ago',
+   detail:'NIMET seasonal rainfall forecast for 2026 projects 15–25% below-average rainfall in Borno and Yobe States. This significantly elevates crop failure risk for rain-fed farming. Weather Index Insurance (WII) is the ideal product — it pays out automatically when rainfall falls below a trigger level, without requiring loss assessment. This is particularly easy to sell because the risk evidence (the forecast itself) is public and verifiable. Target: rice, groundnut, and sorghum farmers in the Lake Chad basin area.',
+   action:'Draft weather index insurance pitch for Borno/Yobe farmers'},
+  {type:'n-amber',emoji:'🔄',title:'Renewal Due: 4 Policies Expiring',
+   body:'Nile Farms, Kano Cooperative, Plateau Ranch — contact before end of week.',time:'3 hr ago',
+   detail:'Four active Leadway agricultural insurance policies are due for renewal within the next 10 days:\n1. Nile Aquaculture Ventures (Benue) — Aquaculture policy, premium ₦2.1M, expires in 7 days\n2. Kano Rice Cooperative — MPCI policy, premium ₦4.8M, expires in 9 days\n3. Plateau Ranch Ltd — Livestock policy, premium ₦1.4M, expires in 10 days\n4. Sunrise Agro Processing (Kaduna) — Fire & Perils, premium ₦680K, expires in 10 days\nTotal renewal value at risk: ₦9.0M. Recommend scheduling calls today.',
+   action:'Draft renewal reminder letters for all 4 expiring policies'},
+];
+
+const targetsData = [
+  {name:'Kano Maize Co-op',detail:'Follow up on proposal sent Wednesday',action:'Call',
+   context:'Proposal was sent 3 days ago. Standard follow-up window. Decision maker is the Cooperative Chairman, Mr. Usman Bello. Last call indicated interest but board approval needed.',
+   suggest:'Remind them of the FMARD grant scheme and CBN Anchor Borrower alignment — this adds urgency.'},
+  {name:'Sunrise Greenhouse',detail:'Schedule site inspection',action:'Email',
+   context:'Pre-insurance inspection required before underwriting can be confirmed. Operations Manager Amaka Obi is the key contact. Farm is in Kubwa, Abuja. Best time for inspection is Tuesday or Wednesday mornings.',
+   suggest:'Send a short email with 2-3 proposed dates and confirm the site inspection checklist.'},
+  {name:'Plateau Ranch Ltd',detail:'Policy renewal due in 12 days',action:'WhatsApp',
+   context:'Current livestock mortality policy expires 7 June 2026. Ranch Manager Danjuma Ibrahim prefers WhatsApp communication. Premium is ₦1.4M. No claims on this policy in the last 2 years — excellent renewal case.',
+   suggest:'Lead with the no-claims record and offer a loyalty renewal incentive.'},
+  {name:'Benue Fish Farms',detail:'Submit formal quotation request',action:'Call',
+   context:'Initial discussion held 2 weeks ago. They operate 28 catfish ponds and are NIRSAL-linked. Quotation request needs to be formally submitted through underwriting. Premium estimate: ₦1.8M for aquaculture cover.',
+   suggest:'Call to confirm pond details (species, stocking density, pond size) needed for underwriting.'},
+];
+
+const newsData = [
+  {src:'Punch',hl:'CBN releases ₦50bn for AGSMEIS agric loans to smallholders',time:'8:14am',
+   detail:'The Central Bank of Nigeria has approved the release of ₦50 billion under the Agri-Business/Small and Medium Enterprise Investment Scheme (AGSMEIS) for smallholder and medium-scale agricultural businesses. The funds will be disbursed through participating financial institutions at 5% interest. CBN guidelines mandate that AGSMEIS-backed farms must carry agricultural insurance — creating a direct pipeline of insurable clients. Sales strategy: partner with the nearest bank branch to identify loan applicants and present Leadway as the preferred insurer.',
+   action:'How can I identify AGSMEIS beneficiaries in my territory for insurance sales?'},
+  {src:'Vanguard',hl:'Kebbi State commissions 10,000ha irrigation project for dry season farming',time:'9:02am',
+   detail:'Kebbi State Governor has commissioned a 10,000-hectare irrigation project along the Rima River, targeting dry season cultivation of rice, wheat, and vegetables. The project will benefit an estimated 8,000 smallholder farmers and 200 commercial operations. Dry season farming on irrigated land carries significant insurance value — flood risk from irrigation failure, crop disease in humid conditions, and equipment breakdown are key exposures. This is among the largest single insurance opportunities in Northwest Nigeria this year.',
+   action:'Draft a pitch for the Kebbi irrigation scheme farmers covering dry season crop and flood insurance'},
+  {src:'FMARD',hl:'Ministry announces second season input distribution for 6 northern states',time:'10:30am',
+   detail:'FMARD has commenced second-season input distribution — seeds, fertilizer, and agro-chemicals — to 180,000 registered farmers across Kaduna, Kano, Kebbi, Niger, Plateau, and Nasarawa States. Input distribution marks the start of the planting season and the highest-risk period for crop insurance. This is the optimal window to approach farmers before field activities begin. Contact: State ADP offices in each state hold the full farmer registry.',
+   action:'What insurance products are most relevant for second season crop farmers in northern Nigeria?'},
+  {src:'This Day',hl:'NIRSAL signs MoU with 14 state governments on anchor borrower expansion',time:'11:15am',
+   detail:'NIRSAL has signed Memoranda of Understanding with 14 state governments to expand the Anchor Borrower Programme to an additional 500,000 smallholder farmers. The MoU specifically includes insurance as a mandatory component of all ABP loan packages. Leadway is positioned to be a preferred provider if we formally apply for NIRSAL insurer accreditation. This is a strategic growth opportunity — not just individual policies but a systematic programme-level partnership.',
+   action:'Draft a letter to NIRSAL applying to be a preferred insurance provider under the Anchor Borrower Programme'},
+  {src:'BusinessDay',hl:'Nigerian poultry industry targets ₦2trn revenue by 2027 — APLPA',time:'12:00pm',
+   detail:'The Association of Poultry Livestock Processors and Allied (APLPA) has released a 2027 growth target of ₦2 trillion for Nigeria\'s poultry sector, driven by investment in commercial farms, processing, and cold chain infrastructure. This growth trajectory means significantly increased insurance exposure — larger flocks, more infrastructure, and higher-value supply chains. Leadway should increase its presence at APLPA events and target mid-to-large commercial farms expanding toward processing.',
+   action:'What sales strategy should I use to target the growing commercial poultry processing sector in Nigeria?'},
+  {src:'Reuters',hl:'West Africa faces heightened flood risk this rainy season — ECOWAS report',time:'1:45pm',
+   detail:'An ECOWAS climate report has warned that West Africa faces a heightened flood risk this rainy season due to La Niña weather patterns and increased upstream Sahel rainfall. Nigeria\'s lower Niger and Benue river basins are specifically cited as high-risk zones. This creates sector-wide urgency for flood and weather-related agricultural insurance. Recommended actions: (1) Issue flood risk advisories to all current clients, (2) Target uninsured farms in flood-prone states with flood insurance pitches, (3) Use the ECOWAS report as a credibility anchor in sales conversations.',
+   action:'Draft a flood risk advisory and insurance pitch for farms in the Niger and Benue river basins'},
+];
+
+const govData = [
+  {src:'CBN',hl:'Anchor Borrower Programme: New batch of 85,000 farmers approved',time:'Active now',
+   detail:'The CBN has approved a new batch of 85,000 Anchor Borrower Programme beneficiaries across 12 states. All beneficiaries are required by CBN circular to carry agricultural insurance as a condition of loan disbursement. The list includes farmers in Kaduna (12,400), Kano (11,200), Kebbi (9,800), Niger (8,500), and 8 other states. Contact your nearest CBN Agric Finance Office or Anchor Processor companies to access the beneficiary register.',
+   action:'How do I approach CBN Anchor Borrower farmers to sell agricultural insurance?'},
+  {src:'BOA',hl:'Bank of Agriculture launches ₦10bn facility for commercial poultry & fishery',time:'New',
+   detail:'The Bank of Agriculture (BOA) has launched a dedicated ₦10 billion credit facility for commercial poultry and fishery operators at a concessionary rate of 7% per annum. All borrowers must demonstrate adequate insurance cover. The facility targets farms with minimum investment of ₦5M. This is a high-priority pipeline — BOA has offices in all 36 states and can provide borrower lists to accredited insurers. Minimum viable insurance: Poultry Mortality + Equipment Breakdown OR Aquaculture + Goods-in-Transit.',
+   action:'Draft a pitch for a BOA-funded commercial poultry or fishery operator'},
+  {src:'NIRSAL',hl:'NIRSAL Agric Value Chain Financing — applications open for Q2 2026',time:'Deadline: Jun 30',
+   detail:'NIRSAL is accepting applications for its Agric Value Chain Financing facility for Q2 2026. Target beneficiaries include producers, processors, aggregators, and off-takers in the rice, maize, poultry, and fishery value chains. NIRSAL requires all financed entities to carry comprehensive insurance with a NAICOM-licensed insurer. Application deadline: 30 June 2026. Leadway can assist clients in applying for NIRSAL financing while simultaneously onboarding them as insurance clients — a compelling dual-value proposition.',
+   action:'Draft a letter to a farm operator explaining NIRSAL financing and Leadway insurance as a combined package'},
+  {src:'AFDB',hl:'African Development Bank approves $120m for West Africa food security',time:'Ongoing',
+   detail:'The African Development Bank (AfDB) has approved a $120 million grant and concessional loan package for West Africa food security programs. Nigeria will receive approximately $34M of this allocation through the Federal Ministry of Agriculture. Funds will target rice, maize, and soybean value chains in 9 states. Insurance is a key risk-mitigation requirement in AfDB-funded agricultural projects. Leadway should engage the implementing FMARD unit to be designated as the preferred insurer for the programme.',
+   action:'How can Leadway position itself to insure AfDB-funded agricultural projects in Nigeria?'},
+  {src:'World Bank',hl:'Nigeria: $500m AGRIFIN program — 500,000 smallholder farmers targeted',time:'Active',
+   detail:'The World Bank\'s AGRIFIN program for Nigeria is actively disbursing $500M in agricultural financing to 500,000 smallholder farmers across 10 states. Insurance is embedded in the program design, with AGRIFIN requiring all beneficiaries to carry crop and/or livestock insurance. The program is implemented through State Ministries of Agriculture and coordinating NGOs. Leadway should engage the State-level AGRIFIN coordinators to be the program\'s insurance provider — this alone could represent 50,000–100,000 new policies.',
+   action:'Draft an expression of interest letter to the World Bank AGRIFIN program to become their insurance provider'},
+];
+
+const sectorsData = [
+  {emoji:'🐔',name:'Poultry Sector',num:'142',numColor:'var(--blue)',lbl:'Active farms monitored',
+   rows:[['Disease alerts','Newcastle — 3 LGAs',true],['Expansions','+19 this week',false],['Avg flock size','12,400 birds',false],['Top locations','Ogun, Kano, Kaduna',false]],
+   detail:'The Nigerian poultry sector is the largest livestock sub-sector by value, contributing approximately ₦1.6 trillion to the economy annually. Of the 142 farms currently monitored in your territory, 89 are commercial-scale operations (10,000+ birds) and 53 are medium-scale (2,000–10,000 birds).\n\nKey risk events this period:\n• Newcastle Disease active in 3 Kano LGAs — all farms within 80km are at elevated risk\n• Feed price inflation (maize up 2.1%) is squeezing margins, making financial protection more valuable\n• Power supply disruptions in Kaduna and Kano increasing generator-failure mortality risk\n\nTop insurance products for this sector: Poultry Mortality Insurance, Business Interruption, Equipment Breakdown (generator cover), Fire & Special Perils.\n\nPipeline value: ₦18.4M estimated annual premium from uninsured farms currently monitored.',
+   action:'Give me a comprehensive poultry insurance sales strategy for Northwest Nigeria'},
+  {emoji:'🐟',name:'Fishery Sector',num:'89',numColor:'#00796b',lbl:'Fish farms tracked',
+   rows:[['New ponds','+8 this month',false],['CBN-linked','34 farms',false],['Avg pond area','0.4 ha',false],['Top locations','Benue, Anambra',false]],
+   detail:'Nigeria\'s aquaculture sector produces approximately 350,000 metric tonnes of fish annually, with catfish (Clarias species) dominating smallholder production. Of the 89 farms tracked in your territory, 34 are linked to CBN or BOA financing — all of which require insurance.\n\nKey risk events this period:\n• Benue River water quality advisory following upstream agricultural runoff\n• Feed prices (fishmeal) up 8% this quarter, increasing farm financial stress\n• 8 new pond construction projects identified in Benue and Nasarawa — new insurance prospects\n\nTop insurance products: Aquaculture/Fishery Insurance (mortality cover), Equipment Breakdown (aerators, pumps), Goods-in-Transit (live fish transport), Fire & Special Perils (infrastructure).\n\nPipeline value: ₦8.7M estimated from the 34 CBN-linked farms alone.',
+   action:'Give me a sales pitch strategy for catfish farmers in Benue and Nasarawa States'},
+  {emoji:'🐄',name:'Livestock Sector',num:'67',numColor:'#6a1a5c',lbl:'Ranches & herders tracked',
+   rows:[['Cattle ranches','43',false],['Dairy projects','12 active',false],['FMD alerts','Adamawa — Watch',true],['Top locations','Plateau, Taraba',false]],
+   detail:'Nigeria\'s cattle population of approximately 20 million heads makes it among the largest in Africa. However, insurance penetration in the livestock sector is extremely low — below 3% nationally — representing a significant untapped market.\n\nOf the 67 operations tracked in your territory:\n• 43 are commercial cattle ranches (50–500 heads each)\n• 12 are commercial dairy projects, mostly in Plateau State\n• 12 are mixed livestock operations\n\nKey risk events this period:\n• Foot-and-Mouth Disease (FMD) advisory for Adamawa — all cattle operations in the state at risk\n• Improving farmer-herder relations in Plateau State making commercial ranching more viable\n• 3 new dairy projects announced in Jos — high-value insurance prospects\n\nTop insurance products: Livestock Mortality Insurance, Foot-and-Mouth Disease Cover, Transit Insurance (cattle movement), Group Life (ranch workers).\n\nPipeline value: ₦12.1M estimated from commercial operations alone.',
+   action:'Draft a livestock mortality insurance pitch for a cattle ranch in Plateau State'},
+];
+
+const statesData = [
+  {name:'Kaduna',pct:92,count:'31 leads',detail:'Major poultry hub. 3 commercial farms currently expanding. NIRSAL office active. Top opportunity: Prosperity Poultry Farm expansion.'},
+  {name:'Kano',pct:88,count:'28 leads',detail:'Largest market by volume. Rice and groundnut cooperatives. Newcastle disease alert active — urgent window for poultry mortality cover.'},
+  {name:'Kebbi',pct:85,count:'24 leads',detail:'Irrigation farming hub. Rima River scheme creates largest single-state crop insurance opportunity. New 10,000ha project just commissioned.'},
+  {name:'Benue',pct:78,count:'21 leads',detail:'Fishery capital. 42+ catfish farms, many NIRSAL-linked. Also strong cassava and yam farming base.'},
+  {name:'Plateau',pct:72,count:'18 leads',detail:'Livestock stronghold. 12 dairy projects. Temperate climate supports diverse farming. Jos proximity gives market access.'},
+  {name:'Nasarawa',pct:65,count:'16 leads',detail:'Growing commercial farming zone. Proximity to Abuja drives demand for fresh produce — greenhouse and vegetable farms emerging.'},
+  {name:'Niger',pct:63,count:'14 leads',detail:'Flood-prone river basin farming. Huge rice cultivation area. Flood insurance is the primary product opportunity here.'},
+  {name:'Adamawa',pct:58,count:'13 leads',detail:'Livestock and crop farming. FMD watch active. Dairy projects emerging. Historical anchor borrower presence.'},
+  {name:'Oyo',pct:55,count:'12 leads',detail:'Poultry and cassava stronghold. Large cooperatives. SW Nigeria proximity means stronger insurance literacy among farmers.'},
+  {name:'Abuja',pct:50,count:'11 leads',detail:'Premium greenhouse and urban farming market. High-value operations, educated operators, stronger willingness to pay for insurance.'},
+  {name:'Taraba',pct:45,count:'9 leads',detail:'Emerging commercial farming. Cattle ranching growing. River Taraba basin supports irrigation farming.'},
+  {name:'Jigawa',pct:40,count:'8 leads',detail:'Cotton, groundnut and rice farming. State government agricultural programs creating new insurable assets.'},
+];
+
+const weatherData = [
+  {icon:'⛈',state:'Kebbi',cond:'Heavy rain',risk:'wr-high',
+   detail:'NiMet has issued a flood advisory for Kebbi State. Rainfall 40% above seasonal average for this period. Rima River is at 78% of flood stage. All irrigated farms along the river plain face immediate risk. Priority action: contact Kebbi Irrigation Farmers Association and any other insured or uninsured farms in the area immediately. Flood insurance window is narrow — once flooding begins, it is too late to underwrite.'},
+  {icon:'🌧',state:'Niger',cond:'Flooding risk',risk:'wr-high',
+   detail:'Niger State\'s low-lying rice farming areas along the Niger River are under a flooding watch. Upstream rainfall in Guinea Highlands is increasing river levels across the Lower Niger basin. Commercial rice farms in Lavun, Mokwa, and Gbako LGAs are most exposed. This is a high-urgency sales window for flood insurance and crop insurance endorsements.'},
+  {icon:'🌤',state:'Kaduna',cond:'Partly cloudy',risk:'wr-med',
+   detail:'Kaduna State is currently experiencing normal seasonal rainfall with occasional heavy spells. Moderate risk for farm operations. Primary insurance concern this period is disease-related (Newcastle in neighbouring Kano) rather than weather. Good conditions for farm inspections and proposal deliveries.'},
+  {icon:'☀️',state:'Kano',cond:'Dry & hot',risk:'wr-med',
+   detail:'Kano is experiencing above-average temperatures with below-average rainfall for the period. Heat stress is a growing risk for poultry operations — birds under heat stress show increased mortality. This is a compelling argument for poultry mortality insurance. Groundwater-dependent farming is also affected by the dry spell.'},
+  {icon:'⛅',state:'Plateau',cond:'Overcast',risk:'wr-low',
+   detail:'Plateau State is experiencing typical highland weather — overcast and cool. Low immediate weather risk for farming. The current season is good for crops and livestock. Focus on proactive insurance sales rather than urgent risk-based pitches in this state.'},
+  {icon:'🌦',state:'Benue',cond:'Showers',risk:'wr-med',
+   detail:'Benue State is receiving moderate, irregular showers typical of the north-central zone. Fishery operations face moderate risk from water quality changes following heavy rains (reduced dissolved oxygen, pathogen risk). Crop farmers in the Benue Valley should ensure coverage is in place before the peak rainy season intensifies in June–July.'},
+  {icon:'☀️',state:'Abuja',cond:'Clear',risk:'wr-low',
+   detail:'Abuja and FCT are currently clear with normal conditions. Low weather-related insurance urgency. However, this is the ideal time to conduct farm visits and site inspections for greenhouse and peri-urban farming operations before seasonal rains intensify.'},
+  {icon:'🌩',state:'Borno',cond:'Drought watch',risk:'wr-high',
+   detail:'Borno State is under a drought watch per NIMET\'s seasonal forecast, with projected 20–25% below-average rainfall. This severely threatens rain-fed crop farming in the state. Weather Index Insurance (WII) is the most appropriate product — it triggers automatic payouts when rainfall falls below defined thresholds. Target: groundnut, cowpea, sorghum, and millet farmers in the Lake Chad basin farming communities.'},
+];
+
+const pipelineData = [
+  {farm:'Prosperity Poultry Farm',loc:'Kaduna',sector:'Poultry',cover:'Poultry Mortality + BI',premium:'₦3.2M',priority:'High',conv:82,pc:'#2e7d32',
+   detail:'Strongest lead in your current pipeline. Farm is expanding flock size and has been active on social media about their growth plans. The expansion itself triggers a significant increase in insurance need. Poultry Mortality covers the flock; Business Interruption covers income loss during any shutdown period. Next action: schedule a site visit to assess flock size and infrastructure for underwriting.'},
+  {farm:'Green Valley Rice Coop',loc:'Kano',sector:'Crop',cover:'MPCI + Weather Index',premium:'₦5.8M',priority:'High',conv:76,pc:'#2e7d32',
+   detail:'Largest premium opportunity in your pipeline. The cooperative\'s 340 farmers across 680 hectares represent a single group policy opportunity. CBN Anchor Borrower enrollment makes insurance mandatory. Multi-Peril Crop Insurance covers crop failure from named perils; Weather Index provides automatic payouts for rainfall shortfalls. Key contact is the Cooperative Chairman.'},
+  {farm:'Nile Aquaculture',loc:'Benue',sector:'Fishery',cover:'Aquaculture + Equipment',premium:'₦2.1M',priority:'High',conv:71,pc:'#2e7d32',
+   detail:'NIRSAL-linked facility makes insurance a loan condition, simplifying the sale. 42 ponds with catfish and tilapia. Key risks: disease (bacterial infection), flood from Benue River, equipment failure (aerators). Site inspection recommended to assess pond construction quality and water source for underwriting purposes.'},
+  {farm:'Kebbi Irrigation Farmers',loc:'Kebbi',sector:'Crop',cover:'Dry Season + Flood',premium:'₦7.2M',priority:'High',conv:68,pc:'#2e7d32',
+   detail:'Largest single premium opportunity in pipeline. 520 member farmers eligible for a group agricultural policy. Government linkage through FMARD announcement adds credibility to Leadway\'s approach. The current flood alert in Kebbi creates urgency. Recommend approaching the Association President with a group policy proposal that can be presented at their next meeting.'},
+  {farm:'Sunrise Greenhouse',loc:'Abuja',sector:'Greenhouse',cover:'Greenhouse + Fire & Perils',premium:'₦1.4M',priority:'Med',conv:58,pc:'#e67e22',
+   detail:'Medium priority — educated operator in Abuja market who understands insurance value. Greenhouse structure itself is the primary insurance asset, along with the crops inside. Fire from electrical fault, structural collapse from windstorm, and crop loss from pest incursion are key risks. A site visit is already scheduled — convert this to a proposal delivery appointment.'},
+  {farm:'Adamawa Dairy Ranch',loc:'Adamawa',sector:'Livestock',cover:'Livestock Mortality',premium:'₦1.9M',priority:'Med',conv:52,pc:'#e67e22',
+   detail:'FMD advisory in Adamawa makes timing of this outreach very good — the disease risk is real and visible to the ranch operator. 380 cattle at an average value of ₦850,000 per head represents a herd value of approximately ₦323M — fully exposed without insurance. Focus pitch on the FMD risk and the herd replacement cost.'},
+  {farm:'Plateau Maize Estate',loc:'Plateau',sector:'Crop',cover:'MPCI + Business Int.',premium:'₦2.6M',priority:'High',conv:65,pc:'#2e7d32',
+   detail:'Newly identified NIRSAL-linked commercial maize farm on Plateau. Good conversion probability due to financing requirement. 200ha of second-season maize currently being planted. MPCI covers crop loss from named perils; Business Interruption covers the estate\'s fixed costs and revenue during any recovery period. First contact recommended this week.'},
+];
+
+const metricDetails = {
+  leads:{emoji:'🎯',title:'Hot Leads Today — 24',sub:'Territory intelligence summary',
+    content:`TODAY'S LEAD BREAKDOWN\n\nBy Sector:\n• Poultry: 8 leads (₦14.2M est. premium)\n• Crop/Cooperative: 7 leads (₦28.4M est. premium)\n• Fishery: 4 leads (₦6.1M est. premium)\n• Livestock: 3 leads (₦4.8M est. premium)\n• Greenhouse: 2 leads (₦2.6M est. premium)\n\nBy Priority:\n• High Priority: 14 leads\n• Medium Priority: 8 leads\n• Low/Watch: 2 leads\n\nBy State:\n• Kaduna: 6 leads\n• Kano: 5 leads\n• Kebbi: 4 leads\n• Others: 9 leads\n\nNew since yesterday: 6 leads\nConverted this week: 2 leads (₦4.8M total premium)\n\nTop action: Call Kebbi Irrigation Farmers today — flood alert creates urgency.`,
+    action:'Summarize my top 5 most urgent insurance leads for today'},
+  premium:{emoji:'₦',title:'Estimated Premium Pool — ₦48M',sub:'Current pipeline valuation',
+    content:`PREMIUM POOL BREAKDOWN\n\nActive Pipeline (₦48M total):\n• Kebbi Irrigation Farmers: ₦7.2M\n• Green Valley Rice Coop: ₦5.8M\n• Poultry sector (8 farms): ₦14.2M total\n• Fishery (4 farms): ₦6.1M total\n• Livestock (3 ranches): ₦4.8M total\n• Greenhouse/other: ₦4.0M total\n• Other crop leads: ₦5.9M total\n\nNew premium identified today: ₦12M\n• Plateau Maize Estate: ₦2.6M\n• 3 new poultry leads from LinkedIn: ₦4.8M\n• Kano Cooperative referral: ₦4.6M\n\nMonthly target: ₦15M\nYear-to-date: ₦38M converted\nConversion rate this month: 31%`,
+    action:'How can I close the highest-value leads in my pipeline faster?'},
+  weather:{emoji:'⚠️',title:'7 Active Weather Alerts',sub:'Risk zones requiring immediate action',
+    content:`ACTIVE WEATHER ALERTS\n\n🔴 HIGH RISK (Urgent — pitch immediately):\n• Kebbi State: Flood advisory — Rima River at 78% flood stage\n• Niger State: Flooding watch — Niger River levels rising\n• Borno State: Drought watch — 25% below-average rainfall forecast\n\n🟡 MEDIUM RISK (Monitor — approach this week):\n• Kano: Above-average heat — poultry heat stress risk\n• Kaduna: Sporadic heavy showers — soil erosion risk for crops\n• Benue: Irregular showers — fishery water quality risk\n\n🟢 LOW RISK (Normal conditions):\n• Plateau, Abuja, Oyo: Normal seasonal conditions\n\nRecommended immediate actions:\n1. Call Kebbi Irrigation Farmers today re: flood insurance\n2. Reach all uninsured Borno farmers with weather index pitch\n3. Send heat stress advisory to Kano poultry farms`,
+    action:'Draft urgent weather risk advisory messages for farmers in Kebbi and Borno States'},
+  followups:{emoji:'📅',title:'11 Follow-ups Due',sub:'Contact management summary',
+    content:`FOLLOW-UP SCHEDULE\n\n🔴 OVERDUE (4 contacts):\n1. Kano Maize Co-op — Proposal sent 5 days ago, no response\n2. Benue Catfish Farm — Quotation requested 6 days ago\n3. Sokoto Groundnut Farmer — Site inspection agreed, date not confirmed\n4. Plateau Dairy Ranch — WhatsApp sent 4 days ago\n\n🟡 DUE TODAY (4 contacts):\n5. Sunrise Greenhouse — Confirm inspection date\n6. Adamawa Dairy Ranch — Initial introduction call\n7. Niger River Rice Farm — Follow up on NIRSAL linkage\n8. Kaduna Poultry Cluster — Meeting confirmation\n\n🟢 DUE THIS WEEK (3 contacts):\n9. Kebbi Cooperative — Schedule board presentation\n10. Jos Dairy Project — Send product brochure\n11. Abuja Agro-processor — Introduction email\n\nTotal pipeline value at risk from overdue contacts: ₦11.2M`,
+    action:'Help me draft follow-up messages for my 4 overdue contacts'},
+};
+
+// ══════════════════════════════════════════════════════
+// MODAL ENGINE
+// ══════════════════════════════════════════════════════
+const AI_SYS = `You are an expert agricultural insurance sales AI assistant for Leadway Assurance Company Limited, Nigeria. You help insurance sales executives identify leads, draft proposals, pitch strategies, and analyze farm risks across Nigeria and West Africa. Key products: Multi-Peril Crop Insurance, Poultry Mortality Insurance, Fishery/Aquaculture Insurance, Livestock Insurance, Greenhouse Insurance, Weather Index Insurance, Fire & Special Perils, Business Interruption, Equipment Breakdown, Goods-in-Transit, Group Life. Key programs: CBN Anchor Borrower, NIRSAL, AGSMEIS, Bank of Agriculture, FMARD, State ADPs. Nigerian regulator: NAICOM. Key seasons: First season March–July, Second season August–November, Dry season November–March. Always be concise, professional, Nigeria-specific, and action-oriented. Use ₦ for currency.`;
+
+function openModal(emoji, title, sub, bodyHTML, footerHTML) {
+  document.getElementById('m-emoji').textContent = emoji;
+  document.getElementById('m-title').textContent = title;
+  document.getElementById('m-sub').textContent = sub;
+  document.getElementById('m-body').innerHTML = bodyHTML;
+  document.getElementById('m-footer').innerHTML = footerHTML;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+}
+function closeModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function kvRow(k, v) {
+  return `<div class="modal-kv-item"><div class="modal-kv-k">${k}</div><div class="modal-kv-v">${v}</div></div>`;
+}
+
+function tagsHTML(arr, cls='tg') {
+  return arr.map(t=>`<span class="tag ${cls}">${t}</span>`).join('');
+}
+
+function aiAreaHTML(prompt) {
+  return `<div class="modal-section">
+    <div class="modal-section-title">🤖 AI Intelligence</div>
+    <div class="modal-ai-area">
+      <div class="modal-ai-label">🤖 Leadway AI Assistant — Generating insights...</div>
+      <div class="modal-ai-content" id="modal-ai-content">
+        <div class="modal-ai-loading"><span style="display:flex;gap:4px">${[1,2,3].map(()=>`<span style="width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.6);animation:dotpulse 1.2s infinite"></span>`).join('')}</span> Loading AI analysis...</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function loadModalAI(prompt) {
+  const el = document.getElementById('modal-ai-content');
+  if (!el) return;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1000,
+        system: AI_SYS, messages:[{role:'user',content:prompt}]})
+    });
+    const data = await res.json();
+    const text = data.content?.map(c=>c.text||'').join('') || 'No response.';
+    el.textContent = text;
+  } catch(e) {
+    el.textContent = '⚠️ Could not connect to AI. Check your internet connection.';
+  }
+}
+
+// ── OPEN LEAD MODAL ──
+function openLead(i) {
+  const l = leadsData[i];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Lead Overview</div>
+      <div class="modal-kv">
+        ${kvRow('Farm / Company', l.name)}
+        ${kvRow('Location', l.loc)}
+        ${kvRow('Sector', l.sector)}
+        ${kvRow('Scale', l.scale)}
+        ${kvRow('Est. Annual Premium', l.premium)}
+        ${kvRow('Conversion Probability', l.prob + '%')}
+        ${kvRow('Source', l.source)}
+        ${kvRow('Key Contact', l.contact)}
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">About This Lead</div>
+      <p style="font-size:12px;line-height:1.7;color:var(--text2)">${l.desc}</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Recommended Products</div>
+      <div class="modal-tags">${tagsHTML(l.products)}</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Risk Profile</div>
+      <div style="background:var(--red-lt);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);font-weight:600">⚠️ ${l.risk}</div>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('Draft a complete insurance proposal pitch for ${l.name} in ${l.loc}, a ${l.sector} operation. Include recommended products, estimated premium, risk analysis, and sales strategy.')">📄 Draft Proposal</button>
+    <button class="mf-btn mf-gold" onclick="setAIAndClose('Write a WhatsApp message to introduce Leadway Assurance agricultural insurance to the ${l.contact} of ${l.name} in ${l.loc}')">💬 WhatsApp Pitch</button>
+    <button class="mf-btn mf-secondary" onclick="setAIAndClose('Write a professional introduction email to ${l.name} (${l.sector} farm in ${l.loc}) about Leadway agricultural insurance')">✉️ Email</button>`;
+  openModal('🏭', l.name, `${l.sector} · ${l.loc} · ${l.score} Priority`, body, footer);
+  loadModalAI(`Give me a detailed sales intelligence briefing on how to approach and close ${l.name}, a ${l.sector} operation in ${l.loc}. Include: key pain points, best insurance products to lead with, objection handling tips, and a recommended pitch sequence. Be specific and Nigeria-focused.`);
+}
+
+// ── OPEN NOTIF MODAL ──
+function openNotif(i) {
+  const n = notifsData[i];
+  const urgency = n.type==='n-red' ? '🔴 URGENT' : n.type==='n-green' ? '🟢 OPPORTUNITY' : '🟡 MONITOR';
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Alert Details</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <span class="tag ${n.type==='n-red'?'':''}` + (n.type==='n-red'?`" style="background:var(--red-lt);color:var(--red)`:n.type==='n-green'?`" style="background:var(--green-lt);color:var(--green)`:`" style="background:var(--amber-lt);color:var(--amber)"`) + `>${urgency}</span>
+        <span class="tag to">${n.time}</span>
+      </div>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2);white-space:pre-line">${n.detail}</p>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('${n.action}')">🤖 AI Action</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal(n.emoji, n.title, urgency + ' · ' + n.time, body, footer);
+  loadModalAI(`${n.action}. Be specific, actionable, and professional. Focus on the Nigerian agricultural insurance context for Leadway Assurance.`);
+}
+
+// ── OPEN TARGET MODAL ──
+function openTarget(i) {
+  const t = targetsData[i];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Contact Details</div>
+      <div class="modal-kv">
+        ${kvRow('Company', t.name)}
+        ${kvRow('Action Required', t.action)}
+        ${kvRow('Task', t.detail)}
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Background Context</div>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2)">${t.context}</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Suggested Approach</div>
+      <div style="background:var(--green-lt);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--green2);line-height:1.6">💡 ${t.suggest}</div>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('Draft a ${t.action.toLowerCase()} message for ${t.name}: ${t.detail}. Context: ${t.suggest}')">✍️ Draft Message</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal('📞', t.name, 'Contact Action: ' + t.action, body, footer);
+  loadModalAI(`I need to ${t.action.toLowerCase()} ${t.name} about: ${t.detail}. Context: ${t.context}. Suggested approach: ${t.suggest}. Generate the best message I can send right now — make it persuasive, professional, and brief.`);
+}
+
+// ── OPEN NEWS MODAL ──
+function openNews(i, isGov) {
+  const n = isGov ? govData[i] : newsData[i];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Full Story</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <span class="tag tg">${n.src}</span>
+        <span class="tag to">${n.time}</span>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">${n.hl}</p>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2)">${n.detail}</p>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('${n.action}')">🤖 AI Sales Strategy</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal('📰', n.hl.length > 50 ? n.hl.substring(0,50)+'...' : n.hl, n.src + ' · ' + n.time, body, footer);
+  loadModalAI(n.action + '. Be specific, actionable, and focused on the Nigerian agricultural insurance sales context for Leadway Assurance.');
+}
+
+// ── OPEN SECTOR MODAL ──
+function openSector(i) {
+  const s = sectorsData[i];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Sector Intelligence</div>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2);white-space:pre-line">${s.detail}</p>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('${s.action}')">🤖 AI Strategy</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal(s.emoji, s.name + ' — Sector Intelligence', s.num + ' operations monitored', body, footer);
+  loadModalAI(s.action + '. Include specific farms to target, recommended products, pitch strategies, and common objections. Be detailed and Nigeria-specific.');
+}
+
+// ── OPEN STATE MODAL ──
+function openState(i) {
+  const s = statesData[i];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">State Intelligence</div>
+      <div class="modal-kv">
+        ${kvRow('State', s.name)}
+        ${kvRow('Activity Level', s.pct + '% of max')}
+        ${kvRow('Current Leads', s.count)}
+      </div>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2)">${s.detail}</p>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('Give me a complete agricultural insurance sales strategy for ${s.name} State Nigeria — key farming activities, top leads to target, recommended products, and approach.')">🤖 State Strategy</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal('📍', s.name + ' State', s.count + ' · Activity: ' + s.pct + '%', body, footer);
+  loadModalAI(`Give me a comprehensive agricultural insurance sales strategy for ${s.name} State Nigeria. Include: main crops and livestock, key insurance opportunities, recommended products, best times to approach, and any current risk events relevant to insurance sales. Be specific.`);
+}
+
+// ── OPEN WEATHER MODAL ──
+function openWeather(i) {
+  const w = weatherData[i];
+  const riskLabel = {'wr-high':'🔴 HIGH RISK','wr-med':'🟡 MEDIUM RISK','wr-low':'🟢 LOW RISK'}[w.risk];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Weather Intelligence</div>
+      <div style="text-align:center;padding:16px 0">
+        <div style="font-size:48px">${w.icon}</div>
+        <div style="font-size:16px;font-weight:700;margin:8px 0">${w.state} State</div>
+        <div style="font-size:13px;color:var(--text2)">${w.cond}</div>
+        <span class="w-risk ${w.risk}" style="margin-top:8px;display:inline-block;font-size:12px;padding:4px 14px">${riskLabel}</span>
+      </div>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2)">${w.detail}</p>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('Draft an urgent weather risk advisory and insurance pitch for farmers in ${w.state} State, which is currently experiencing: ${w.cond}. Risk level: ${riskLabel}.')">📢 Draft Risk Advisory</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal(w.icon, w.state + ' State — Weather Alert', riskLabel + ' · ' + w.cond, body, footer);
+  loadModalAI(`Draft an urgent but professional weather risk advisory and insurance sales message for agricultural operators in ${w.state} State, Nigeria. Current condition: ${w.cond}. ${w.detail}. Focus on which insurance products are most relevant and how to pitch them immediately.`);
+}
+
+// ── OPEN PIPELINE MODAL ──
+function openPipeline(i) {
+  const o = pipelineData[i];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Opportunity Details</div>
+      <div class="modal-kv">
+        ${kvRow('Farm / Company', o.farm)}
+        ${kvRow('Location', o.loc)}
+        ${kvRow('Sector', o.sector)}
+        ${kvRow('Recommended Cover', o.cover)}
+        ${kvRow('Estimated Premium', o.premium)}
+        ${kvRow('Priority', o.priority)}
+        ${kvRow('Conversion Probability', o.conv + '%')}
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Sales Intelligence</div>
+      <p style="font-size:12px;line-height:1.75;color:var(--text2)">${o.detail}</p>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('Draft a complete insurance proposal pitch for ${o.farm} in ${o.loc} for the following cover: ${o.cover}. Estimated premium: ${o.premium}. Include risk analysis, product benefits, and closing strategy.')">📄 Draft Proposal</button>
+    <button class="mf-btn mf-gold" onclick="setAIAndClose('Write a WhatsApp message pitching ${o.cover} insurance to ${o.farm} in ${o.loc}')">💬 WhatsApp</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal('📊', o.farm, o.sector + ' · ' + o.loc + ' · ' + o.priority + ' Priority', body, footer);
+  loadModalAI(`Give me a detailed sales strategy to close ${o.farm} in ${o.loc} for ${o.cover} at an estimated premium of ${o.premium}. Include: best opening approach, key selling points, likely objections and how to handle them, and a recommended next step sequence. Be specific and actionable.`);
+}
+
+// ── OPEN METRIC MODAL ──
+function openMetric(key) {
+  const d = metricDetails[key];
+  const body = `
+    <div class="modal-section">
+      <div class="modal-section-title">Intelligence Summary</div>
+      <pre style="font-size:12px;line-height:1.75;color:var(--text2);white-space:pre-wrap;font-family:var(--font)">${d.content}</pre>
+    </div>
+    ${aiAreaHTML('')}`;
+  const footer = `
+    <button class="mf-btn mf-primary" onclick="setAIAndClose('${d.action}')">🤖 AI Insights</button>
+    <button class="mf-btn mf-secondary" onclick="closeModalBtn()">Close</button>`;
+  openModal(d.emoji, d.title, d.sub, body, footer);
+  loadModalAI(d.action + '. Be specific, actionable, and focused on the Nigerian agricultural insurance context for a Leadway Assurance sales executive.');
+}
+
+function setAIAndClose(prompt) {
+  closeModalBtn();
+  document.getElementById('ai-in').value = prompt;
+  document.getElementById('ai-in').scrollIntoView({behavior:'smooth'});
+  setTimeout(runAI, 300);
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════
+function renderLeads() {
+  document.getElementById('leads').innerHTML = leadsData.map((l,i)=>`
+    <div class="lead" onclick="openLead(${i})">
+      <div class="lead-top">
+        <div class="lead-name">${l.name}</div>
+        <span class="score ${l.score==='High'?'s-high':l.score==='Med'?'s-med':'s-low'}">${l.score} Priority</span>
+      </div>
+      <div class="lead-meta">
+        <span>📍 ${l.loc}</span><span>🏭 ${l.scale}</span><span>💰 ${l.premium} est.</span>
+      </div>
+      <div class="lead-tags">
+        ${tagsHTML(l.products)}
+        <span class="tag tb">${l.prob}% conv.</span>
+        <span class="tag to">via ${l.source}</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:5px">👆 Click for full intelligence & AI pitch</div>
+    </div>`).join('');
+}
+
+function renderNotifs() {
+  document.getElementById('notifs').innerHTML = notifsData.map((n,i)=>`
+    <div class="notif ${n.type}" onclick="openNotif(${i})">
+      <div class="notif-title">${n.emoji} ${n.title}</div>
+      <div class="notif-body">${n.body}</div>
+      <div class="notif-time">${n.time} · Click for full details</div>
+    </div>`).join('');
+}
+
+function renderTargets() {
+  document.getElementById('targets').innerHTML = targetsData.map((t,i)=>`
+    <div class="tgt" onclick="openTarget(${i})">
+      <div class="tgt-num">${i+1}</div>
+      <div class="tgt-info">
+        <div class="tgt-name">${t.name}</div>
+        <div class="tgt-detail">${t.detail}</div>
+      </div>
+      <button class="tgt-btn">${t.action} ↗</button>
+    </div>`).join('');
+}
+
+function renderSectors() {
+  document.getElementById('sectors').innerHTML = sectorsData.map((s,i)=>`
+    <div class="sector-card" onclick="openSector(${i})">
+      <div class="sector-hd"><div class="sector-emoji">${s.emoji}</div><div class="sector-name">${s.name}</div></div>
+      <div class="sector-num" style="color:${s.numColor}">${s.num}</div>
+      <div class="sector-lbl">${s.lbl}</div>
+      <div class="sector-rows">
+        ${s.rows.map(r=>`<div class="srow"><span class="srow-k">${r[0]}</span><span class="srow-v" ${r[2]?'style="color:var(--red)"':''}>${r[1]}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:8px">👆 Click for sector intelligence</div>
+    </div>`).join('');
+}
+
+function renderNews() {
+  document.getElementById('news').innerHTML = newsData.map((n,i)=>`
+    <div class="news-item" onclick="openNews(${i},false)">
+      <div class="news-src">${n.src}</div>
+      <div class="news-hl">${n.hl}</div>
+      <div class="news-time">${n.time} · Click for full story & AI strategy</div>
+    </div>`).join('');
+  document.getElementById('gov').innerHTML = govData.map((n,i)=>`
+    <div class="news-item" onclick="openNews(${i},true)">
+      <div class="news-src">${n.src}</div>
+      <div class="news-hl">${n.hl}</div>
+      <div class="news-time">${n.time} · Click for full details & strategy</div>
+    </div>`).join('');
+}
+
+function renderStates() {
+  document.getElementById('states').innerHTML = statesData.map((s,i)=>`
+    <div class="state-item" onclick="openState(${i})">
+      <div class="state-name">${s.name}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${s.pct}%"></div></div>
+      <div class="state-count">${s.count}</div>
+    </div>`).join('');
+}
+
+function renderWeather() {
+  document.getElementById('weather').innerHTML = weatherData.map((w,i)=>`
+    <div class="weather-item" onclick="openWeather(${i})">
+      <div class="w-icon">${w.icon}</div>
+      <div class="w-state">${w.state}</div>
+      <div class="w-cond">${w.cond}</div>
+      <span class="w-risk ${w.risk}">${w.risk.replace('wr-','').toUpperCase()}</span>
+    </div>`).join('');
+}
+
+function renderPipeline() {
+  document.getElementById('pipeline').innerHTML = pipelineData.map((o,i)=>`
+    <tr onclick="openPipeline(${i})">
+      <td><strong>${o.farm}</strong></td>
+      <td>${o.loc}</td>
+      <td><span class="tag tb">${o.sector}</span></td>
+      <td>${o.cover}</td>
+      <td style="font-weight:700;color:var(--green)">${o.premium}</td>
+      <td style="font-weight:700;color:${o.pc}">${o.priority}</td>
+      <td>
+        <div class="prog-wrap">
+          <div class="prog-bar"><div class="prog-fill" style="width:${o.conv}%;background:${o.pc}"></div></div>
+          <span style="font-size:10px;font-family:var(--mono);min-width:28px">${o.conv}%</span>
+        </div>
+      </td>
+      <td><button class="pitch-btn" onclick="event.stopPropagation();openPipeline(${i})">Details ↗</button></td>
+    </tr>`).join('');
+}
+
+function renderTicker() {
+  const items = [
+    {label:'Maize (90kg)',val:'₦52,500',chg:'+2.1%',up:true},
+    {label:'Rice (50kg)',val:'₦95,000',chg:'+0.8%',up:true},
+    {label:'Soybean (50kg)',val:'₦68,000',chg:'-1.2%',up:false},
+    {label:'Groundnut',val:'₦74,000',chg:'+3.5%',up:true},
+    {label:'Catfish (live/kg)',val:'₦2,800',chg:'+1.4%',up:true},
+    {label:'Broiler (live)',val:'₦6,400',chg:'-0.5%',up:false},
+    {label:'Cattle (grade A)',val:'₦850,000',chg:'+2.8%',up:true},
+    {label:'Cassava (100kg)',val:'₦58,000',chg:'+1.1%',up:true},
+    {label:'Sorghum (100kg)',val:'₦43,500',chg:'+1.9%',up:true},
+    {label:'Palm Oil (25L)',val:'₦38,000',chg:'-0.3%',up:false},
+  ];
+  document.getElementById('ticker').innerHTML = [...items,...items].map(t=>
+    `<span class="ticker-item"><span class="t-label">📊 ${t.label}</span><strong style="color:#fff">${t.val}</strong><span class="${t.up?'t-up':'t-dn'}">${t.chg}</span></span>`).join('');
+}
+
+function renderChart() {
+  new Chart(document.getElementById('chart'),{
+    type:'bar',
+    data:{labels:['Discovered','Contacted','Proposed','Quoted','Converted'],
+      datasets:[{label:'Leads',data:[142,87,54,31,18],
+        backgroundColor:['#c8e6c9','#a5d6a7','#66bb6a','#43a047','#1a5c38'],borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11}}},
+        x:{grid:{display:false},ticks:{font:{size:11}}}}}
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════
+function updateClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+setInterval(updateClock,1000); updateClock();
+
+function tabSwitch(el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function refreshLeads() {
+  renderLeads();
+  showPopup('var(--green)','✅ Leads Refreshed','Found 2 new leads in your territory since last refresh.');
+}
+
+function showPopup(color,title,body) {
+  const p=document.getElementById('popup');
+  p.style.borderColor=color;
+  p.style.display='block';
+  document.getElementById('p-title').textContent=title;
+  document.getElementById('p-body').textContent=body;
+  document.getElementById('p-time').textContent=new Date().toLocaleTimeString('en-NG');
+  clearTimeout(window._pt);
+  window._pt=setTimeout(()=>{p.style.display='none'},6000);
+}
+function closePopup(){document.getElementById('popup').style.display='none';}
+
+const autoPopups=[
+  ['var(--green)','🌱 New Lead Detected','Plateau Maize Estate (Kaduna) — ₦4.2M est. premium. Click any lead for details.'],
+  ['var(--red)','⚠️ Flood Risk Alert','NiMet: flood alert for Niger & Kebbi. Click the weather cards for full advisory.'],
+  ['var(--amber)','🔄 Renewal Reminder','Plateau Ranch policy expires in 8 days. Click Today\'s Contacts for details.'],
+  ['var(--green)','💰 CBN Anchor Borrower','New batch: 8,500 farmers in your territory. Click the Gov Programs section.'],
+  ['var(--red)','🐔 Disease Alert','Newcastle in Kano LGA. Click the Poultry alert for urgent pitch strategy.'],
+];
+let _pi=0;
+setTimeout(function cycle(){
+  const[c,t,b]=autoPopups[_pi%autoPopups.length]; showPopup(c,t,b); _pi++;
+  setTimeout(cycle,22000);
+},5000);
+
+function q(text){document.getElementById('ai-in').value=text; document.getElementById('ai-in').focus();}
+
+async function runAI(){
+  const input=document.getElementById('ai-in').value.trim(); if(!input)return;
+  const btn=document.getElementById('ai-btn'),out=document.getElementById('ai-out'),think=document.getElementById('ai-think');
+  btn.disabled=true; btn.textContent='Generating...'; out.style.display='none'; think.style.display='flex';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYS,
+        messages:[{role:'user',content:input}]})});
+    const data=await res.json();
+    out.textContent=data.content?.map(c=>c.text||'').join('')||'No response received.';
+    out.style.display='block';
+  }catch(e){
+    out.textContent='⚠️ Could not connect to AI. Check your internet connection.';
+    out.style.display='block';
+  }finally{btn.disabled=false;btn.textContent='Generate ↗';think.style.display='none';}
+}
+document.getElementById('ai-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey)runAI();});
+
+// ── INIT ──
+renderLeads(); renderNotifs(); renderTargets(); renderSectors();
+renderNews(); renderStates(); renderWeather(); renderPipeline();
+renderTicker(); renderChart();
+</script>
+</body>
+</html>
